@@ -5,13 +5,14 @@ To review and implement concepts learned from class in a self-designed program.
 
 ### Description
 You will design, propose, and implement a project of your own choosing.  Your project must implement or include each of the following concepts:
-Variables/data types
-Input/output
-Conditional statements
-Loops
-Functions
-Arrays/strings (either directly or as a pointer)
-Advanced data types (structures and enumerated lists)
+  - Variables/data types
+  - Input/output
+  - Conditional statements
+  - Loops
+  - Functions
+  - Arrays/strings (either directly or as a pointer)
+  - Advanced data types (structures and enumerated lists) <br>
+
 Your program must be well-commented and provide the user with information on how to use your program.  Interaction with the program should be specified within the program as well as within a readme.txt document.  Rules for games should also be included in the readme.txt document.
 Additionally, your code must be written efficiently and handle invalid user input appropriately.  This means that if you have the user enter a number, and the user enters a string or a character, your program should not crash, go into an infinite loop, or produce anything outside of the expected functionality.
 
@@ -21,9 +22,9 @@ Note:  There may be functionality you wish to include in your project that we ha
 
 ### Part 1: Proposal
 You must submit a proposal that details the following:
-Descriptive overview of project (what it does, what game it implements/simulates, etc).  This should be long enough to explain what your program is and what it does/does not do.
-Detailed examples of concept implementation (an example each of how you will use functions, loops, etc.).  You do not need to explain how you will use variables or input/output unless it is not inherently obvious.
-Your reasons for picking this project (you are interested in game design and wanted to create a game, you think the application is interesting and why, etc.).
+  - Descriptive overview of project (what it does, what game it implements/simulates, etc).  This should be long enough to explain what your program is and what it does/does not do.
+  - Detailed examples of concept implementation (an example each of how you will use functions, loops, etc.).  You do not need to explain how you will use variables or input/output unless it is not inherently obvious.
+  - Your reasons for picking this project (you are interested in game design and wanted to create a game, you think the application is interesting and why, etc.).
 
 ### Part 2: Project Implementation
 You must implement the project as described in your proposal and conforming to the expectations in the Description section.  
