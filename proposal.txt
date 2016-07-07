@@ -1,0 +1,17 @@
+//Anya Lauria
+
+I want my final project to be a program that creates a character profile for the user. The character profile will be of 
+an elf, or some other fantasy creature. The user could even choose what creature they would like to create a profile of.
+The program will take user input, and I will create algorithms that take that user input and turn it into something that
+goes into the profile. So for example, when the user enters their name, the program will take the letters of their name 
+and create a new elf/hobbit/orc/witch name with it. Like that, the program will also calculate their new age, lifespan
+the realm they live in (I could include visual description), new job details, what their specialty (which is different 
+from a job, and more like a skill they work on throughout one lifetime) is. They would be informed of their race, what
+dialect they speak. I can offer an options menu for the user to choose appearance, clothes, and traits. Since all of 
+these algorithms will change with the kind of creature the user wants to be, I can use structures. I will also use loops,arrays, and I can use functions to do some of the calculations. 
+
+Additionally, if this isn't enough, I could add a short text adventure game to take them through their first day, or 
+a translating program that translates basic english phrases to the same in what new language their character speaks. Or 
+both. 
+
+So yeah, that's basically what my idea is. 
