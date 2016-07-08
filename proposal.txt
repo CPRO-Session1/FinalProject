@@ -14,4 +14,6 @@ Additionally, if this isn't enough, I could add a short text adventure game to t
 a translating program that translates basic english phrases to the same in what new language their character speaks. Or 
 both. 
 
-So yeah, that's basically what my idea is. 
+This idea appeals to me as it sort of a different kind of game (i'm interested in game designing), but also because I 
+like writing, and one of my favourite parts of writing is creating new characters, and developing them as people- which
+is sort of similar to this program idea. 
