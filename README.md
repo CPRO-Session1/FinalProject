@@ -13,6 +13,8 @@ You will design, propose, and implement a project of your own choosing.  Your pr
   - Arrays/strings (either directly or as a pointer)
   - Advanced data types (structures and enumerated lists) <br>
 
+If it is appropriate to use a header file and/or an external .c file containing utility functions, you should do so.  If you have more than a few functions in your program, this applies to you.
+
 Your program must be well-commented and provide the user with information on how to use your program.  Interaction with the program should be specified within the program as well as within a readme.txt document.  Rules for games should also be included in the readme.txt document.
 Additionally, your code must be written efficiently and handle invalid user input appropriately.  This means that if you have the user enter a number, and the user enters a string or a character, your program should not crash, go into an infinite loop, or produce anything outside of the expected functionality.
 
@@ -25,6 +27,7 @@ You must submit a proposal that details the following:
   - Descriptive overview of project (what it does, what game it implements/simulates, etc).  This should be long enough to explain what your program is and what it does/does not do.
   - Detailed examples of concept implementation (an example each of how you will use functions, loops, etc.).  You do not need to explain how you will use variables or input/output unless it is not inherently obvious.
   - Your reasons for picking this project (you are interested in game design and wanted to create a game, you think the application is interesting and why, etc.).
+  - Any external libraries you are considering using and what you will use them for.  Keep in mind that most of your code should be your own, and we cannot provide any help for external libraries.  This includes graphics libraries.  You are responsible for learning and figuring them out on your own.  Also detail any code you will use that is not yours.
 
 ### Part 2: Project Implementation
 You must implement the project as described in your proposal and conforming to the expectations in the Description section.  
@@ -32,6 +35,8 @@ You must implement the project as described in your proposal and conforming to t
 Functions and large code blocks should be documented (have comments briefly explaining their purpose, as well as any parameters or return values, if applicable).
 
 You must include a readme.txt detailing how to run your project, a brief overview of what it does, and a brief explanation of interaction with the program (e.g. “You may enter commands at the >> prompt.  For help/suggestions of commands to enter at any time, type ‘help’.” for a text adventure game).  If your project is a game or game simulator, you should also include any rules as applicable (e.g. “Go Fish is a game of matching cards.  If you suggest a card your opponent has, he/she must give you that card.  Likewise, if the opponent asks for a card you have, you must give him/her that card.  If no card matches, player draws from the pile.  Otherwise, players continue asking for cards until they ask for a card no one has.”).
+
+Your readme.txt should also detail any changes made that do not follow your original proposal and explain why they differ.
 
 
 ### Deliverables
