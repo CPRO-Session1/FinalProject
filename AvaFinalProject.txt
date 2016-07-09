@@ -3,16 +3,14 @@ July 9, 2016
 
 Final Project Proposal:
 
-For my final project, I would like to create a quiz show, similar to Jeopardy. The objective of the game is to answer as many questions, correctly, as possible.  I am considering adding a time limit as well.
+For my final project, I would like to create a quiz show, similar to Jeopardy. The objective of the game is to answer as many questions correctly as possible.  I will be adding a time limit as well.
 
-The questions would be divided into different categories.  For example, under the "computer science" category, the lowest, or '100' slot question might state: 'This device was used to solve math problems before the invention of electricity." The answer, which would not be case sensitive, would be inputed by the contestant/player.  Also, I am deciding whether to require the player input to include "what is ..." before the answer.  If I have time, I would like to make a 2, 3, or 4 player option as well. 
+The questions would be divided into different categories.  For example, under the "computer science" category, the lowest, or '100' slot question might state: 'This device was used to solve math problems before the invention of electricity." The answer, which would not be case sensitive, would be inputed by the contestant/player.  Also, I am deciding whether to require the player input to include "what is ..." before the answer.  This game will be created for a single-player, but if I have time, I would like to make a 2, 3, or 4 player option as well. 
 
-An example of a loop I would use is for the fill-in the answer section. If the correct answer is chosen, then the point goes to the player who asked the question (under a time limit). If that person does not answer correctly or under the time limit, it will go to the next player, and if that player answers correctly, then the original amount of points will get split in half.
+An example of a loop I would use is for the fill-in the answer section. If the correct answer is chosen, then the point goes to the player who asked the question (under a time limit). If that person does not answer correctly or under the time limit, it will go to the next player, and if that player answers correctly, then the original amount of points will get split in half. 
 
-I am choosing this project because quiz shows and being part of one is so much fun, and even playing one that I create is so cool. I am excited to develop the game design and how I will arrange the 'answers' and the 'questions', and where I will put the timer, and arrange different color schemes. 
+I am choosing this project because taking part in a quiz show or game is so much fun, and playing one that I create would be great. I am excited to develop the game design and decide how I will arrange the 'answers' and the 'questions', and where I will put the timer, and arrange different color schemes. 
 
 Libraries I will use are the include the ones we have used in class: stdio.h, string.h, math.h, etc. I plan to use the time.h library for the timer.  For graphics, I may want to use Cairo, although I have never used that library before.
 
 This is my Final Project Proposal and I am excited to start working on it (once it is approved)!
-
-
