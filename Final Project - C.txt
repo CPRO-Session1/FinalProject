@@ -1,0 +1,99 @@
+Matthew Danielson
+Final Project Notes and Info/Project Proposal
+
+------------------
+Project Proposal | 
+------------------
+
+
+
+		Overview:
+		
+	My project will be a simulation that allows for users to customize their apocalypse scenario,
+and survive in it, designed around the user making strategic decisions to manage resources and a
+group, while dealing with scenarios that result from both their choices and random elements. This
+apocalypse is of a more fallout-esque nature rather than any other(i.e. surviving after a nuclear
+fallout).
+
+	In terms of customization, a user will be able to set the following when commencing a game:
+		- Population of affected area
+			Main industry of the region
+				Alters effectivity and odds of success of certain actions
+
+		- Size of group
+			Talents and abilities of individual group members*
+			Name individual group members
+			
+		- Additonally, they can change how far into the apocalypse the game begins
+			This affects...
+				Availability of supply items/Successfullness of scavenging
+				Availability of power
+				General dangerousness of the area
+	* Look at game mechanics in order to understand how this affects gameplay
+	
+	Within the game itself, the player will be working on a day by day basis; each day, they 
+will be presented with what they have. For instance, for food, they will be shown how many days
+they can feed their population with their current food. Below is an example of this graphic.
+
+Remaining Supplies
+------------------
+
+Food:  x days 
+Fuel: z units
+Weapons: a units
+Electronics: y units   
+Construction Supplies: b units
+
+	Note that there are no specific items - considering the time span given to work on this project,
+that would be too time consuming. However, to take weapons for instance, if there are enough weapons
+for everyone in the group, then in any potiential combat scenarios, they will have a higher chance
+to win the diceroll that determines the winner. Fuel determines whether the group can use a vehicle,
+which decreases the odds of being attacked and increases general safety. Construction allows for 
+improving the safety of the group's base, decreasing odds of being attacked, and making it easier
+to defend.
+
+	On a daily basis, the player can choose to do 2 of the following actions:
+		
+		- Fortify the base(construction): Decreases the odds of being attacked and gives the group an advantage in
+		future assaults.  	
+		
+		- Scavenge: The player will have the choice of what they want to look for,
+		within the five supply groups. This is risker than most of the other actions.
+[]		
+		- "Farming": This is general category in which food production and preparation falls. While 
+		this is not really farming, it is attempting to focus on getting more food and is not as risky as scavenging.
+		
+		- Tinker: This allows for growth of the group members. This, depending on the successfullness, can give your group members 
+		permanent upgrades. Additionally, it can allow for weapon fabrication or car repairs. This element is entirely random - otherwise
+		it would be too strong - except when the car is broken. Then, all tinkering actions are dedicating to attempting to repair it.
+		
+		- Assault: This is BY FAR the riskiest action in the game. Group members will almost certainly die. That being said,
+		it is definitely the strongest way to get a lot of resources.
+		
+		
+		Game Mechanics & Daily Events:
+	
+	An important element of this game/simulation will be random, daily events. One such mechanic will
+be the base assault, which can be safeguarded against by improving the group's base. Other daily events
+include dice rolls on being assaulted while scavenging, varying success rates for actions - especially
+when said action is done many times in succession. As time progresses, each turn the user takes being counted
+as one day, loot becomes scarcer and attacks become more frequent. Even if players play exceedingly well, unlucky dice rolls
+and daily events can ruin even a seemingly stable situation. Members of the player's party will die, and new party members are 
+probably among the rarest encounters. There are no win conditions for this game, as the point is to see how long you can survive. To quote
+Project Zomboid's developers, "These are the end times. This is how you died."
+	
+	In terms of game mechanics, there are 4 skills: Scavenging, Combat, Construction and Tinkering.
+At party creation, each character is allowed to have a speciality in any one of these 4. This will give a bonus to that character.
+These stats are used, in the case of combat, to roll against enemies, whose strength increases as the game progresses. If every member has a weapon,
+then the bonus from weapons is maximized; if not enough weapons are present, advantage is given on a percentage-based system. For all other skills,
+a success multipler is given. These are calculated by adding together all the current group member's deviation from the norm. There are very rare events
+that can give permanent stat upgrades, but do not rely on these.
+		
+	The game is lost if every party member dies. If there is not enough food, every action that the group takes has a -5%(subject to change) to every action per day
+that they have not eaten. If that modifier drops below 50%, the group will starve.	
+	
+	
+	
+	
+	
+	
