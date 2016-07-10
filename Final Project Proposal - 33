@@ -1,0 +1,7 @@
+My program, "33", is a puzzle/adventure game in the form of a simulated database. You are trapped in an old, abandoned government facility, where your only possible means of escape is a single emergency exit vault that is opened via a terminal connected to the facility's mainframe computer. The problem is, the only person who had the administrative authority to open the vault was the owner of the facility who is long gone by now. Your mission is to figure out a way to gain administrative control over the system and gain access to the controls of that vault via this terminal. The program I am writing simulates the terminal itself, which is basically a database that the user navigates around in. It is riddled with puzzles that, when figured out, bring the player a step closer to having full control over the mainframe of the facility. 
+
+I've already taken a bit of time to write the very beginning of the game, and it already employs all the concepts required. The program will, of course, rely heavily on structures primarily containing char arrays, loops/conditional statements are going to be used often for a variety of different puzzles, different sections of the database will be stored in different functions and accessed by calling them.
+
+Being interested in both media-based art and info technology, I want to experience writing a basic version of a database while keeping the project fun and creative.
+
+My description may make the project sound big, but I will keep the size appropriate to be able to be completed in a week.
