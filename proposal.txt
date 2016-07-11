@@ -1,0 +1,16 @@
+For my final project, I wish to create the game of 2048. 2048 is a simple game played on phones tablets and computers. It is composed of a 4x4 grid that has numbers filling in the spaces. The game begins by creating two random blocks- either a two or a four- anywhere on the board. After that, you simply combine the same blocks to create a bigger block. Ex: a 2 and a 2 would create a 4, a 4 and a 4 would create an eight and etc. Also, every time you swipe the board (left, right, up or down) a new block spawns in. In terms of the program itself, here's what I have planned:
+variables/data types - I will use these throughout the program to create a lot of things. Examples include math equations such as (x*2) and etc.
+
+input/output - the user will have to input a move (right, left, up, down) and the output will be a completely new board with the new numbers assembled.
+	
+conditional statements - similar to variables, I will be using a lot of conditional statements tthroughout the program. An example could be if (space == 0) {
+						return 0;
+This would tell the program that if there is a block on an edge, and a move is called to move it in the directions of the edge, it won't do anything.
+
+loops - Loops are going to be really helpful especially when dealing with the movement of the blocks themselves. I will use conditional statements along with loops to assign each block in the grid a variable name and write lines that will give them parameters. I think the hardest part of this program will be to have all the numbers on the board to correctly move.
+
+functions - As someone with OCD, I'm going to try and make this code really neat and clean. By using functions to organize all parts of program, I hope to keep it easily readable. 
+
+Arrays/Strings - If I dont create an equation to mae the blocks properly multiple, I plan to just make an array or string of the numbers so I can just have them called during the game.
+
+Advanced data types - In terms of structures and enumerated lists, I don't really know where I'll use them. As I progress in my code, I think I'll reach a point where I'll simply need to use one. If you have any ideas right off the bat though I'm all ears.
