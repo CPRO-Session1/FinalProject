@@ -1,0 +1,33 @@
+Proposal of Final Project  Sheqi
+
+My plan is to write a program that can calculate the frequency of the words appearing in a document.
+
+I want to do this because I think it's useful, and I believe the most important characteristic of computer programming is useful. In addition, I can almost handle it with the things I have learend in the summer program.
+
+Steps:
+1. Open document 1 and read it, and judge if it opens successfully at the same time.
+2. If open successfully, as well as not reaching the end of the document, then calculate the frequency of a word.
+3. Repeat step 2 till the end of the document.
+4. Close document 1.
+5. Open document 2 and try to record data on it, and judge if it opens successfully at the same time.
+6. If open successfully, then record all the words and their frequencies in this document.
+7. Close document 2.
+8. Make all words fit in a static order (maybe from "a" to "z").
+9. Open document 3 and try to record data in it, and judge if it opens successfully at the same time.
+10. If open successfully, then record all the words and frequencies in the order in document 3.
+11. Close document 3.
+
+How to use loops:
+During the process calculating the frequency of one word.
+How to use advanced datatypes:
+Use structures to combine the words and their frequencies together.
+How to use functions:
+....
+How to use arrays:
+In the process of calculating the frequency of one word.
+Arrays:
+In the structure.
+
+External Library:
+I don't understand what is an external library, but I can find external help from my mom. She is a professor in Tsinghua University teaching computer linguistics.
+
