@@ -1,0 +1,8 @@
+Justin Yu
+my idea is to design a text adventure game that simulates an event with the ending totally depending to user's decisions. This will be done using mostly printf and scanf command, although other concepts are also being applied.
+The game will give out instructions using printf and the code will recognize player's decision through scanf. 
+The game will use loop to determine when to exit and end the game.
+The game will use structrues to store data and progress a player has made while array will be more specificly storing the terms used.
+My reason for picking this game is that I personally am a big fan of text based games and I think it will be cool if I can design one myself. Also, it enables me to apply everything I have learned about C which really makes this idea even better.
+I don't think my game will be using any external library. 
+
