@@ -1,0 +1,53 @@
+Julia Tan
+
+1. what it is, what it does/does not do, what the game simulates
+2. detailed examples of concept implementation
+3. reasons for picking project
+
+
+1. My program will simulate an app that acts as a directory to keep all the user's contacts in place. Unlike a regular contact book, this program would also be able to categorize contacts and add ratings.
+
+Functions of the program:
+- Store contacts
+- Categorize contacts into groups such as family, food, clothes
+- Create categories
+- Add and edit details to each contact, which are name, telephone number, ratings(for businesses especially), category and address
+- Display a list of all the contacts under a category
+- Display chosen contact's details
+
+What the program cannot do:
+- Text and call
+
+2. Detailed Examples of Concept Implementation
+Input
+- takes in contact details from user i.e. name, telephone number, rating, address, category
+- takes in category name from user
+- takes in commands from user such as to display a list of all contacts in a category, display the chosen contact's details, or edit contact details
+
+Output
+- displaying contact details
+- displaying categories
+- displaying contacts under a specific category
+
+Conditional Statements
+- Processes user commands to see what they would like to do, such as create a contact, edit contact details, create new category, etc.
+
+Loops
+- For loops to print out contents of a category
+
+Functions
+- Function to add contact details to a category
+- Function to create new category
+- Function to finish program
+- Function to display category contents
+- Function to display contact details
+
+Arrays/strings
+- Each category would be an array
+- Each contact detail is a string
+
+Advanced data types: structs
+- Each contact would be a struct that would contain name, address, telephone number, rating and category
+
+3. Reasons for picking this project
+I chose to do this project because I wanted to create some kind of 'app' that someone could use on a phone. I also wanted to do something that could be quite useful, compared to games.
