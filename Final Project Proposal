@@ -29,5 +29,8 @@ Arrays:
 In the structure.
 
 External Library:
-I don't understand what is an external library, but I can find external help from my mom. She is a professor in Tsinghua University teaching computer linguistics.
-
+stdio.h
+string.h
+assert.h
+ctype.h
+math.h (maybe)
