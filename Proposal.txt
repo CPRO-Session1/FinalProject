@@ -1,0 +1,28 @@
+Text Adventure Game
+A simple text adventure game that allows you to pick up items, look around, and go to different rooms. The story I haven’t figured out yet.
+
+Todo:
+1.	Player
+	a.	structure with
+		i.	location (takes room)
+		ii.	inventory – array
+2.	Inventory
+	a.	array of player structure probably
+	b.	available items could be an enumerator
+3.	Room structure
+	a.	each room has a summary when you walk into it
+	b.	each room has a different summary for when you look
+	c.	Room summaries can change
+	d.	rooms have items in them that you can take
+4.	Commands
+	a.	housed in a player command function
+	b.	Look – gives a room’s summary
+		i.	in bag = see inventory
+	c.	Open – goes to a smaller “room” like a cabinet, closet, etc.
+	d.	Go
+		i.	Go back, to previous room.
+	e.	Take – take an item in environment from inventory
+	f.	Help – gives all available commands
+	g.	yell – call something, doesn’t do anything most of the time
+	h.	Hint – Maybe implement suggested commands
+	i.	put – try to put an item in something else
