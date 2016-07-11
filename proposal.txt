@@ -9,6 +9,11 @@ standard deviation, etc. THis will be done by importing a file with the name dat
 checking the entered name against the names in the file and then reading the corresponding
 popularity data. All the information for the stats for each name the user enters will be stored\
 in a custom structure. I'm choosing this because it seems like an interesting task, and
-something that could actually be useful when this program ends. If this is too basic, I could
-possibly add a graphical component to it.
+something that could actually be useful when this program ends. I've also done something similar 
+befire in Java, so I'm interested to see just how different it ends up when done in C.
+If this is too basic, I could possibly add a graphical component to it.
+
+ADDITION:
+Libraries: Most Likely just stdio and string, but if I end up doing a graph then the graphics library for that
+
 
