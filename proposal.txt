@@ -11,4 +11,9 @@ I will use a lot of if else statements for the user choice and I'll use a struct
 Why?
 I think this project will be a good way to sum up what I've learned in the class. Also I'm a commuter student so it will be fun to use my commute as an example. Although intially I wanted to use graphics after looking into it I think that it won't be a good way to conclude what I've learned in the class so I'm going with the create your own adventure. Thank you!
 
+
+ADDITION
+	For the array I think I'll do a score that decreases with every decision. The more decisions it takes you to make it to the final, the lower score you get out of 100. It will be included in the struct with arrays which will save data about the player. 
+
+
 Emma. 
