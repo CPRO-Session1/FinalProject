@@ -1,0 +1,19 @@
+Project: Video Shop Database - Olivier Gabison
+
+I'm going to create a system where video store managers can use to log entries of checked out videos.
+This includes the video's ID, Name, date of check out, and date of return.
+
+There will be multiple functions of checking if a video is overdue, checking out a video, returning a video,
+seeing lists of all the videos you inputted (which I will be using files to save so that even when they close the program, the video
+inputs will still remain), editing video details, and viewing video information.
+
+If possible, I may even include a shop where customers can buy movies online with their money (which will be automatically stored
+in the video array).
+
+I will be storing each video in a pointer array where the video's ID corresponds to the place in the array. By doing this, it will be
+easy to access the video the user is looking for by just inputting the ID.
+
+I want to create this because I really want to use files in my project and using pointer arrays. I'm really interested in the files
+aspect of C.
+
+No external libraries will be used.
