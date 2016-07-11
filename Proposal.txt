@@ -3,6 +3,8 @@ Final Project Proposal
 
 For my final project, I want to try and make an old school type game. As a stretch goal, I would like to try and implement a GUI. If all else fails, I will attempt to make it with ascii text. The game will be sort of like a recreation of asteroids, where the goal is to destroy the asteroids in a little space ship. Would also like to try to have enemy AI instead of just asteroids.
 
+**Will be trying to use SDL library for graphical interface.
+
 Variables/data types, obviously to store different game information and data. Will probably need to use structs to code say the asteroids.
 
 Input/Output, one way or another, I am going to have to try and use unbuffered input. Whether it be GUI or ASCII,  I need a way for the program to detect arrow key movements and whatnot.
