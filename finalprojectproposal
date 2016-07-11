@@ -1,0 +1,29 @@
+Caleb Gershengorn	
+
+Final project:
+For my final project, I want to code the game yahtzee in C.
+While I am not sure it would utilize pointers, it would absolutely involve all previous topics we have learned.
+For the scorecard, I would use a data structure with two parts, the name of the category and the score for each category.
+I would print out this scorecard every turn, printing the updated data structure. 
+This data structure would look something like:
+	typedef struct{
+	char category[100];
+	int score;
+	}scores;
+
+I would then create three arrays, one for the scores, one for the categories, and one for the dice.
+For the dice, it would be an array of 5 random numbers 1-6 that the user would be able to update in a dicerolling function to be called later on.
+	int board[]=[five random numbers];
+for the categories, there would be a array of 13 numbers, and each time a category was picked, the number would be placed in the array and would make sure that that number cannot be used again by checking that array.
+	int CategoryList[13];
+for the score, i could use either an array or a constantly updating variable to just have scores added to it to sum up the total scores and print it at the end.
+
+I would also need to create a set of functions to test whether a set of dice fulfills the qualifications for a certain type of roll (full house, straight, etc.)
+I would do this by looping through the board array and just checking whether the needed dice are there, and returning 1 or zero.
+I would then have a pair of larger functions, one to deal with the score and one to deal with the scorecard. First, the dicerolling function would call the scorecard function, which would check if the category chosen is already filled and would call the checking function (where applicable) to decide whether it is valid or not.
+Once the scorecard function has checked the user's choice, it would call the score function, which would add the given to it from the scorecard function to the score variables and update the player's total score.
+The final function would be the dicerolling function. It will print out the dice, and ask the player which dice to reroll, with a feature built in to avoid the user entering a character other than a number 1-6
+it will run inside a loop thrice, to simulate the three rolls the player gets, and the function runs 13 times, once to fill each category.
+Then, the main function would only need to create the arrays of categories and score and dice, so that they can be used in the whole program.
+After the diceroll function runs out, then it prints the total score by adding all the terms in the score array.
+ 
