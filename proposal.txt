@@ -1,10 +1,5 @@
 Julia Tan
 
-1. what it is, what it does/does not do, what the game simulates
-2. detailed examples of concept implementation
-3. reasons for picking project
-
-
 1. My program will simulate an app that acts as a directory to keep all the user's contacts in place. Unlike a regular contact book, this program would also be able to categorize contacts and add ratings.
 
 Functions of the program:
