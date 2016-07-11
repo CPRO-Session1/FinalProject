@@ -1,0 +1,14 @@
+Eli Kalish
+Final Project Proposal
+
+My final project idea is for a program that Takes user input in the form of a name and then
+checks that name against US census data from every decade of the 20th century to display a 
+name's popularity during each decade. The program will display the data for each decade as 
+well as other data such as whether the name is in an upward trend of popularity,
+standard deviation, etc. THis will be done by importing a file with the name data, and then
+checking the entered name against the names in the file and then reading the corresponding
+popularity data. All the information for the stats for each name the user enters will be stored\
+in a custom structure. I'm choosing this because it seems like an interesting task, and
+something that could actually be useful when this program ends. If this is too basic, I could
+possibly add a graphical component to it.
+
