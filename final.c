@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 
 
 typedef struct player { // this is the initial player structure for the beginning where you'll input your name and age.
@@ -19,9 +19,10 @@ int riddle(){//Here i use a loop and the user has to answer a riddle in order to
 	riddles[2]= "If it takes 5 machines 5 minutes to make 5 widgets, how many minuteswill it take for 100 machines to make 100 widgets? (answer withan integer)\n\n";
 
 
-	int answers[3] = {0,9,5}; //The answer options. Each lines up with with a specific riddle in its spot
+	int answers[3] = {0,9,5};        //The answer options. Each lines up with with a specific riddle in its spot
 	int guess; //What the user puts in
-	int n = rand()%3 +1;//This generates a  random number so that when you run through the game again you don't get the same riddle. There is an array of three riddles. And the answers that match them.
+	srand(time(NULL));
+	int n = rand() % 2 + 1;         //This generates a  random number so that when you run through the game again you don't get the same riddle. There is an array of three riddles. And the answers that match them.
 
 
 	printf("\n\n\nUh oh.... looks like you've run into a street magician and before you keep going you have to answer his riddle... once you answer it you can keep going with your commute. Answer quickly because you're alreay running late!\n\n");
@@ -37,6 +38,7 @@ int riddle(){//Here i use a loop and the user has to answer a riddle in order to
 	}while(guess != answers[n]);
 
 	printf("Correct! You can now continue your commute\n");
+
 }
 
 //For scope reaseason my last choice go first so that my second choices and first choices of the user can call on those choices, The way this works is the 3rd choice is first and then the second and finally the first. ONLY the first choice is called in the main because each subsequent choice calls on the next choice based on the user's decision of 1 or 2. Here we go. 
@@ -78,7 +80,7 @@ int choice2b(int c){ // Here is what happens if the user chooses 2 in the first 
 
 	else if(c==2){
 		riddle();
-		printf("\n\nNo! Not again! Your train is not working! Would you like to 1 take a cab the last 15 blocks or 2 walk? \n1 or 2?");
+		printf("\n\nNo! Not again! Your train is not working! Would you like to 1 take a cab the last 15 blocks or 2 walk? \n1 or 2?\n");
 	
 	scanf("%d", &last);
 	final(last);
