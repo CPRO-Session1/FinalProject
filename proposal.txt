@@ -5,3 +5,5 @@ SUN MON TUE WED THU FRI SAT
 2   3   4   5   6   7   8
 9   10  11  12  13  14  15
 ........... etc.
+
+Furthermore it will be an events calendar and I will use file input output to store the inputs of the user, where the event will be displayed on their selected date.
