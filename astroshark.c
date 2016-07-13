@@ -55,8 +55,8 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 	SDL_Delay(3000);
 
-	SDL_DestroyTexture(playerShipTexture);
-	SDL_DestroyRenderer(renderer);
+	SDL_DestroyTexture(playerShipTexture);																			/*Destroys Texture*/
+	SDL_DestroyRenderer(renderer);																					/*Destroys Renderer*/
 	SDL_DestroyWindow(gameWindow); 																					/*Destroys the window that gameWindow is pointing to*/
 	SDL_Quit(); 																									/*Cleans up and quits out of SDL*/
 
