@@ -36,7 +36,7 @@ Functions and large code blocks should be documented (have comments briefly expl
 
 You must include a readme.txt detailing how to run your project, a brief overview of what it does, and a brief explanation of interaction with the program (e.g. “You may enter commands at the >> prompt.  For help/suggestions of commands to enter at any time, type ‘help’.” for a text adventure game).  If your project is a game or game simulator, you should also include any rules as applicable (e.g. “Go Fish is a game of matching cards.  If you suggest a card your opponent has, he/she must give you that card.  Likewise, if the opponent asks for a card you have, you must give him/her that card.  If no card matches, player draws from the pile.  Otherwise, players continue asking for cards until they ask for a card no one has.”).
 
-Your readme.txt should also detail any changes made that do not follow your original proposal and explain why they differ.
+Your readme.txt should also detail any changes made that do not follow your original proposal and explain why they differ.  If you use code (either libraries or individual chunks of code) or pseudocode/code from another language from an outside source, you should cite it in your readme.txt (a description and link is sufficient).
 
 
 ### Deliverables
@@ -44,3 +44,7 @@ Your proposal should be submitted by 10am on Monday, July 11, 2016.  It will eit
 
 Your project is due Friday, July 15, 2016 at 4pm.  Please submit ALL files (source code, external libraries, data files, and executable).
 
+#### Evaluation
+Your project will be evaluated based on a number of things, including (but not limited to)
+  - the creativity of your project and approach
+  - the cleanliness of your implementation
