@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.0.2*/
+/*Astroshark v0.0.3*/
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -19,7 +19,7 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 		return 1;
 	}
 	
-	char windowTitle[18] = {"Astroshark  v0.0.2"}; 																	/*Title of the window*/
+	char windowTitle[18] = {"Astroshark  v0.0.3"}; 																	/*Title of the window*/
 	SDL_Window *gameWindow; 																						/*Declares the gameWindow(pointer) with datatype SDL_Window*/
 	gameWindow = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0); 		/*Createshttp://stackoverflow.com/questions/21007329/what-is-a-sdl-renderer window at the location of gameWindow pointer*/
 	
@@ -51,6 +51,16 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 	int close_requested = 0;
 
+
+	int playerShip_moveForward = 0;
+	int playerShip_moveLeftStrafe = 0;
+	int playerShip_moveBackward = 0;
+	int playerShip_moveRightStrafe = 0;
+
+	int playerShip_xChange = 0;
+	int playerShip_yChange = 0;
+
+	int playerShip_actionShoot = 0;
 	while (!close_requested) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -80,6 +90,7 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 							playerShip_actionShoot = 1;
 							break;
 					}
+					break;
 				case SDL_KEYUP:
 					switch(event.key.keysym.scancode) {
 						case SDL_SCANCODE_W:
@@ -96,15 +107,49 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 							break;
 						case SDL_SCANCODE_D:
 						case SDL_SCANCODE_RIGHT:
-							playerShip_moveRightStrafe;
+							playerShip_moveRightStrafe = 0;
 							break;
 						case SDL_SCANCODE_SPACE:
 							playerShip_actionShoot;
 							break;
 					}
+					break;
 
 			}
 		}
+		if (playerShip_moveForward == 1) {
+			playerShip_dstrect.y -= 10;
+			playerShip_srcrect.x = 640;
+		}
+		if (playerShip_moveBackward == 1)
+			playerShip_dstrect.y += 10;
+		if (playerShip_moveLeftStrafe == 1)
+			playerShip_dstrect.x -= 5;
+		if (playerShip_moveRightStrafe == 1)
+			playerShip_dstrect.x += 5;
+
+		if (playerShip_moveForward == 0) {
+			playerShip_srcrect.x = 0;
+			playerShip_yChange = 0;
+		}
+		if (playerShip_moveBackward == 0)
+			playerShip_yChange = 0;
+		if (playerShip_moveLeftStrafe == 0)
+			playerShip_yChange = 0;
+		if (playerShip_moveRightStrafe == 0)
+			playerShip_yChange = 0;
+
+		
+//		playerShip_dstrect.x = 30*(playerShip_xChange);
+//		playerShip_dstrect.y = 30*(playerShip_yChange);
+		
+		SDL_RenderClear(renderer);
+		SDL_RenderCopy(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect);
+		SDL_RenderPresent(renderer);
+
+
+		SDL_Delay(1000/30);
+		
 	}
 
 
@@ -114,10 +159,6 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 
 
-
-	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect);
-	SDL_RenderPresent(renderer);
 
 	SDL_Delay(3000);
 
