@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <time.h> //for the random
 
 
 typedef struct player { // this is the initial player structure for the beginning where you'll input your name and age.
@@ -74,7 +74,7 @@ int choice2b(int c){ // Here is what happens if the user chooses 2 in the first 
 
 	if(c==1){
 
-		final(last);
+		printf("Awwwww sorry. You didn't make it to class today. CHSP called your family and you've been suspended for a day. Try again!");
 
 	}	
 
