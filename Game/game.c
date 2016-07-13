@@ -1,160 +1,56 @@
 #include "func.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
-void print_room_summary(room room)
-{
-	printf("%s\n", room.description);
-	int size = sizeof(room.items)/sizeof(room.items[0]);
-	int saw = 0;
-	if (size) 
-	{
-		printf("I see ");
-		for (int i = 0; i < size - 1; i++)
-		{
-			if (room.items[i] == NULL && saw == 1) 
-			{
-				printf("and a %s.\n\n", room.items[i-1]);
-				break;
-			}
-			else if (room.items[i] != NULL && room.items[i+1] != NULL) 
-			{
-				printf("a %s, ", room.items[i]);
-				saw = 1;
-			}
-			
-		}
-		if (!saw) printf("nothing.\n\n");
-	}
-}
 
-void get_args(char** arg1Ptr , char ** arg2Ptr, char* command)
-{
-	char * commandPtr = command;
-	char * command_list[8] = {"look", "open", "goto", "take", "help", "yell", "put", "drop"};
-	char *arg1 = (char*) malloc(strlen(command)*sizeof(char));
-	char *arg2 = (char*) malloc(strlen(command)*sizeof(char));
 
-	for(int i = 0; *commandPtr != ' ' && i <= (int) strlen(command); i++)
-	{
-		arg1[i] = *commandPtr;
-		commandPtr++;
-		if (*commandPtr == '\n')
-		{
-			arg1[i+1] = '\0';
-			break;
-		}
-		if (*commandPtr == ' ') 
-		{
-			arg1[i+1] = '\0';
-			break;
-		}
-	}
-	realloc(arg1, (strlen(arg1)+1)*sizeof(char));
-	for(int i = 0; *commandPtr != '\0'; i++)
-	{
-		commandPtr++;
-		arg2[i] = *commandPtr;
-		if (*commandPtr == '\n' || *commandPtr == '\0')
-		{
-			arg2[i] = '\0';
-			break;
-		}
-	}
-	realloc(arg2, (strlen(arg2)+1)*sizeof(char));
-	printf("ARGS: |%s|, |%s|\n", arg1, arg2);
+void print_room_summary(character *playerPtr);
+void get_args(char**, char**, char*);
+void take(character*,char*,room*,int);
+void moveto(character*, char*, room**, char**);
+void look(character*);
+void note(character*);
 
-	int found_command = 0;
-	for (int i = 0; i < (int) (sizeof(command_list)/sizeof(command_list[0])); i++)
-	{
-		if (strcmp(arg1, command_list[i]) == 0)
-		{
-			found_command = 1;
-		}
-	}
-
-	if (found_command)
-	{
-		*arg1Ptr = arg1;
-		*arg2Ptr = arg2;
-	}
-	else if (*arg1 == '\n')
-	{
-		*arg1Ptr = "none";
-		*arg2Ptr = arg2;
-	}
-	else 
-	{
-		*arg1Ptr = NULL;
-		*arg2Ptr = NULL;
-	}
-
-	if (sizeof(arg1)) 
-	{ 
-		arg1 = NULL;
-	}
-	if (sizeof(arg2)) 
-	{ 
-		arg2 = NULL;
-	}
-	printf("Made args: |%s|, |%s|\n", *arg1Ptr, *arg2Ptr);
-}
-
-void moveto(character*playerPtr, room droom, room sroom)
-{
-	int moved = 0;
-	if (strcmp(sroom.room_name,droom.room_name) == 0)
-	{
-		printf("You're already here.\n");
-		return;
-	}
-	for (int i = 0; i < (int) (sizeof(sroom.connected_rooms)/sizeof(sroom.connected_rooms[0])); i++)
-	{
-		if (sroom.connected_rooms[i])
-		{
-			if (strcmp(droom.room_name, sroom.connected_rooms[i]) == 0)
-			{
-				playerPtr->current_room = droom;
-				printf("\033[2J");
-				printf("%s\n", playerPtr->current_room.entrance_msg);
-				moved = 1;
-			}
-		}
-	}
-	if (!moved)
-	{
-		printf("I can't get to the %s from here.\n", droom.room_name);
-	}
-
-}
 int main()
 {
 	int running = 1;
-	character player;
+
+	/* SET ROOMS -----------------------------------------------------------------*/
+		/* SET START --------------------------------*/
+	room start = {"start", {"bedroom", "END"}}; 
+	room * startPtr = &start;
+	strcpy(start.description , "C Project. [goto] the bedroom to start.");
+		/* SET START --------------------------------*/
+
+		/* SET BEDROOM --------------------------------*/
+	room bedroom = {"bedroom", {"start", "yard", "END"}, {"note", "key", "backpack"},{},{},{},3};
+	room * bedroomPtr = &bedroom;
+	strcpy(bedroom.entrance_msg, "I really have a \nheadache, among other things.\nI should [look] around.");
+	strcpy(bedroom.description, "My bedroom. Nothing special. ");
+	strcpy(bedroom.look_msg, "It's already late.\nI should [goto] the yard soon.\nWhere is everyone?\n");
+		/* SET BEDROOM --------------------------------*/
+
+		/*SET YARD----------------------------------*/
+	room yard = {"yard", {"bedroom", "park", "END"},{"note"},{},{},{},1};
+	room * yardPtr = &yard;
+	strcpy(yard.look_msg, "There's nobody here.\nWait\nI think I see someone\nin the park.\nI could try to [yell] or go see who it is.");
+		/*SET YARD----------------------------------*/
+
+
+	room * room_list[4] = {startPtr, bedroomPtr, yardPtr};
+	char * room_list_strings[4] = {"start", "bedroom", "yard", "END"};
+	/* SET ROOMS -----------------------------------------------------------------*/
+
+	/* SET PLAYER */
+	character player = {NULL,0,6,{NULL,NULL,NULL,NULL,NULL,NULL}};
 	character * playerPtr = &player;
+	player.current_room = startPtr;
+	/* SET PLAYER */
 
-	/* SET START --------------------------------*/
-	room start = {"start", {"bedroom"}}; 
-	strcpy(start.description , "Game Name. [goto] the bedroom to start.");
-	/* SET START --------------------------------*/
-
-	/* SET BEDROOM --------------------------------*/
-	room bedroom = {"bedroom", {"start", "kitchen"}, {"pencil", "towel", "backpack"}};
-	strcpy(bedroom.entrance_msg, "You wake up.");
-	strcpy(bedroom.description, "My bedroom. Nothing special.");
-	/* SET BEDROOM --------------------------------*/
-
-	/*SET KITCHEN ----------------------------------*/
-	room kitchen = {"kitchen", {"bedroom"}};
-	/*SET KITCHEN ----------------------------------*/
-
-	room rooms[3] = {start, bedroom, kitchen};
-	player.current_room = start;
-
+	/* SETUP INTERFACE */
 	printf("\033[2J");
-	print_room_summary(player.current_room);
-	printf("\n");
+	print_room_summary(playerPtr);
+	printf("\n\n"); //just for this one line so that everything lines up in the beginning
+	
+	int guy_ran = 0;
 	while (running)
 	{
 
@@ -174,44 +70,46 @@ int main()
 		char ** arg1Ptr = &arg1;
 		char ** arg2Ptr = &arg2;
 		get_args(arg1Ptr, arg2Ptr, command);
-		printf("Got args: |%s|, |%s|\n", arg1, arg2);
 		free(command);
 		/* GET INPUT*/
 
 		printf("\033[2J");
-		print_room_summary(player.current_room);
+		print_room_summary(playerPtr);
 
-		if (arg1 == NULL && arg2 == NULL)
+		/* EXECUTE COMMANDS -------------------------------------------------------*/
+		if (strcmp(arg1, "goto") == 0)
 		{
-			printf("I don't know how to do that.");
+			moveto(playerPtr, arg2, room_list, room_list_strings);
 		}
-		else if (strcmp(arg1, "none") == 0)
-			;
-		else if (strcmp(arg1, "goto") == 0)
+		else if (strcmp(arg1, "take") == 0)
 		{
-			char * room_names[3] = {"start", "bedroom", "kitchen"};
-			int changed = 0;
-			room to_room;
-			for (int i = 0; i < (int) (sizeof(rooms)/sizeof(rooms[0])); i++)
+			take(playerPtr, arg2, playerPtr->current_room, playerPtr->inventory_size);
+		}
+		else if (strcmp(arg1, "look") == 0)
+		{
+			look(playerPtr);
+		}
+		else if (strcmp(arg1, "read") == 0 && strcmp(arg2, "note") == 0)
+		{
+			note(playerPtr);
+		}
+		else if (strcmp(arg1, "yell") == 0)
+		{
+			if (strcmp(playerPtr->current_room->room_name, "yard") == 0 && guy_ran == 0)
 			{
-				if (strcmp(arg2, room_names[i]) == 0)
-				{
-					to_room = rooms[i];
-					printf("\033[2J");
-					moveto(playerPtr, to_room, player.current_room);
-					changed = 1;
-					print_room_summary(player.current_room);
-				}
+				printf("\033[2J");
+				printf("The man in the park ran away.");
+				guy_ran = 1;
 			}
-			if (!changed)
-			{
-				printf("I don't know where that is.");
-			}
+			else printf("In the command line, nobody can hear you scream.");
+		}
+		else if (strcmp(arg1, "\n") == 0);
+		else (printf("I don't know how to do that."));
+		/* COMMANDS -------------------------------------------------------*/
 
-		if (*arg1Ptr) free(*arg1Ptr);
-		if (*arg2Ptr) free(*arg2Ptr);
-		}
-		printf("\n");
+		free(*arg1Ptr);
+		free(*arg2Ptr);
+		printf("\n\n");
 	}
 	return 0;
 }
