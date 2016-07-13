@@ -49,6 +49,72 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 	playerShip_dstrect.x = 0;																						/*TEMPSets location to 0, 0, the top left corner*/
 	playerShip_dstrect.y = 0;
 
+	int close_requested = 0;
+
+	while (!close_requested) {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch(event.type) {
+				case SDL_QUIT:
+					close_requested = 1;
+					break;
+				case SDL_KEYDOWN:
+					switch(event.key.keysym.scancode) {
+						case SDL_SCANCODE_W:
+						case SDL_SCANCODE_UP:
+							playerShip_moveForward = 1;
+							break;
+						case SDL_SCANCODE_A:
+						case SDL_SCANCODE_LEFT:
+							playerShip_moveLeftStrafe = 1;
+							break;
+						case SDL_SCANCODE_S:
+						case SDL_SCANCODE_DOWN:
+							playerShip_moveBackward = 1;
+							break;
+						case SDL_SCANCODE_D:
+						case SDL_SCANCODE_RIGHT:
+							playerShip_moveRightStrafe = 1;
+							break;
+						case SDL_SCANCODE_SPACE:
+							playerShip_actionShoot = 1;
+							break;
+					}
+				case SDL_KEYUP:
+					switch(event.key.keysym.scancode) {
+						case SDL_SCANCODE_W:
+						case SDL_SCANCODE_UP:
+							playerShip_moveForward = 0;
+							break;
+						case SDL_SCANCODE_A:
+						case SDL_SCANCODE_LEFT:
+							playerShip_moveLeftStrafe = 0;
+							break;
+						case SDL_SCANCODE_S:
+						case SDL_SCANCODE_DOWN:
+							playerShip_moveBackward = 0;
+							break;
+						case SDL_SCANCODE_D:
+						case SDL_SCANCODE_RIGHT:
+							playerShip_moveRightStrafe;
+							break;
+						case SDL_SCANCODE_SPACE:
+							playerShip_actionShoot;
+							break;
+					}
+
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect);
 	SDL_RenderPresent(renderer);
