@@ -1,0 +1,24 @@
+Sean Kee
+Final Project Proposal
+
+For my final project, I want to try and make an old school type game. As a stretch goal, I would like to try and implement a GUI. If all else fails, I will attempt to make it with ascii text. The game will be sort of like a recreation of asteroids, where the goal is to destroy the asteroids in a little space ship. Would also like to try to have enemy AI instead of just asteroids.
+
+**Will be trying to use SDL library for graphical interface.
+
+Variables/data types, obviously to store different game information and data. Will probably need to use structs to code say the asteroids.
+
+Input/Output, one way or another, I am going to have to try and use unbuffered input. Whether it be GUI or ASCII,  I need a way for the program to detect arrow key movements and whatnot.
+
+Conditional statements, will use these to test if the asteroid hit the ship, etc.
+
+Arrays/Strings, Will need to use strings to display various texts, using pointers to send variables over by reference.
+
+Advanced Data Types, as stated before, will probably need to use structs to code certain pieces of the game that would require a "form." I do not believe I will have a use fo enums.
+
+
+I have multiple reasons for picking this project.
+a) I have always been interested in game design.
+b) I really want to test and see how far I can go with pretty much only 2 weeks of actual coding classes, not scratch and dingy "self taught" python.
+c) As for the AI, I've been interested in AI for things such as Unmanned Aerial Vehicals. This also includes things such as machine learning.
+
+
