@@ -4,6 +4,73 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <math.h>
+
+#define WINDOW_HEIGHT 720
+#define WINDOW_WIDTH 1280
+enum direction {NORTH = 5, EAST, SOUTH, WEST};
+
+void calculateMovement(int *current_posX, int *current_posY, int angle, int speed){
+	int quadrant = 0;
+	int deltaX;
+	int deltaY;
+	if (angle < 90 && angle > 0) 
+		quadrant = 1;
+	if (angle < 180 && angle > 90) {
+		quadrant = 4;
+		angle -= 90;
+	}
+	if (angle < 270 && angle > 180) {
+		quadrant = 3;
+		angle -= 180;
+	}
+	if (angle <= 359 && angle > 270) {
+		quadrant = 2;
+		angle -= 270;
+	}
+	if (angle == 0) 
+		quadrant = NORTH;
+	if (angle == 90)
+		quadrant = EAST;
+	if (angle == 180)
+		quadrant = SOUTH;
+	if (angle == 270)
+		quadrant = WEST;
+
+	deltaX = (int) (sin(angle) * speed);
+	deltaY = (int) (cos(angle) * speed);
+
+	switch(quadrant) {
+		case 1:
+			*current_posX += deltaX;
+			*current_posY -= deltaY;
+			break;
+		case 2:
+			*current_posX -= deltaY;
+			*current_posY -= deltaX;
+			break;
+		case 3:
+			*current_posX -= -1 * deltaX;
+			*current_posY += -1 * deltaY;
+			break;
+		case 4:
+			*current_posX += deltaY;
+			*current_posY -= deltaX;
+			break;
+		case NORTH:
+			*current_posY -= speed;
+			break;
+		case EAST:
+			*current_posX += speed;
+			break;
+		case SOUTH:
+			*current_posY += speed;
+			break;
+		case WEST:
+			*current_posX -= speed;
+			break;
+	}
+}
 
 void createShip(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	/*Function to create ship, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
 	SDL_Surface *tempSurface = IMG_Load("resources/playerShip_spritesheet_320x480.png");												/*Creates a temporary surface and loads the spritesheet*/
@@ -21,7 +88,7 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 	
 	char windowTitle[18] = {"Astroshark  v0.0.3"}; 																	/*Title of the window*/
 	SDL_Window *gameWindow; 																						/*Declares the gameWindow(pointer) with datatype SDL_Window*/
-	gameWindow = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0); 		/*Createshttp://stackoverflow.com/questions/21007329/what-is-a-sdl-renderer window at the location of gameWindow pointer*/
+	gameWindow = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0); 		/*Createshttp://stackoverflow.com/questions/21007329/what-is-a-sdl-renderer window at the location of gameWindow pointer*/
 	
 	if (gameWindow == NULL) { 																						/*Tests to see if window creation was successful or not */
 		printf("\n\n***ERROR: Could not create window: %s\nEND ERROR***\n", SDL_GetError());
@@ -51,6 +118,8 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 	int close_requested = 0;
 
+	int playerShip_speed = 10;
+
 
 	int playerShip_moveForward = 0;
 	int playerShip_moveLeftStrafe = 0;
@@ -64,6 +133,15 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 	int playerShip_xChange = 0;
 	int playerShip_yChange = 0;
+
+	int playerShip_xPos = 0;
+	int playerShip_yPos = 0;
+
+	int playerShip_xVelocity = 0;
+	int playerShip_yVelocity = 0;
+
+	int playerShip_xAcceleration = 0;
+	int playerShip_yAcceleration = 0;
 
 	int playerShip_actionShoot = 0;
 	while (!close_requested) {
@@ -126,8 +204,18 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 			}
 		}
+		
+		if (playerShip_rotateLeft == 1)
+			playerShip_rotate -= 9;
+		if (playerShip_rotateRight == 1)
+			playerShip_rotate += 9;
+		if (playerShip_rotate >= 360)
+			playerShip_rotate -= 360;
+		if (playerShip_rotate < 0)
+			playerShip_rotate +=360;
+
 		if (playerShip_moveForward == 1) {
-			playerShip_dstrect.y -= 10;
+			calculateMovement(&playerShip_dstrect.x, &playerShip_dstrect.y, playerShip_rotate, playerShip_speed);
 			playerShip_srcrect.x = 640;
 		}
 		if (playerShip_moveBackward == 1)
@@ -136,11 +224,6 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 			playerShip_dstrect.x -= 5;
 		if (playerShip_moveRightStrafe == 1)
 			playerShip_dstrect.x += 5;
-		if (playerShip_rotateLeft == 1)
-			playerShip_rotate -= 9;
-		if (playerShip_rotateRight == 1)
-			playerShip_rotate += 9;
-
 
 		if (playerShip_moveForward == 0) {
 			playerShip_srcrect.x = 0;
@@ -175,7 +258,7 @@ int initializeAstroshark(int *debug) {																				/*Function for initali
 
 
 
-	SDL_Delay(3000);
+//	SDL_Delay(3000);
 
 	SDL_DestroyTexture(playerShipTexture);																			/*Destroys Texture*/
 	SDL_DestroyRenderer(renderer);																					/*Destroys Renderer*/
