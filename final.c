@@ -74,7 +74,7 @@ int choice2b(int c){ // Here is what happens if the user chooses 2 in the first 
 
 	if(c==1){
 
-		printf("Awwwww sorry. You didn't make it to class today. CHSP called your family and you've been suspended for a day. Try again!");
+		printf("Awwwww sorry! You're train broke down and you didn't make it to class today. CHSP called your family and you've been suspended for a day. Try again!");
 
 	}	
 
@@ -114,9 +114,9 @@ int main(){ // This is the main function. Not much happens here because each fun
 
 	printf("Welcome %s to the choice your own adventure. It's your job to get to class as fast as possible. When prompted, press 1 or 2 to answer. Good Luck!\n\n", p1.name);
 //CHOICE NUMBER1
-	printf("You're at bowling green and it's 9:00-only 1 hour until class. You have the choice of train or cab. For train press 1 and for cab press 2: \n");
+	printf("\nYou're at bowling green and it's 9:00-only 1 hour until class. You have the choice of train or cab. For train press 1 and for cab press 2: \n");
 	scanf("%d", &a);
 
-	choice1(a);
+	choice1(a); //This is where the program is called and all of the functions work off of it from here
 	return 0;
 }
