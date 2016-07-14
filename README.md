@@ -48,3 +48,9 @@ Your project is due Friday, July 15, 2016 at 4pm.  Please submit ALL files (sour
 Your project will be evaluated based on a number of things, including (but not limited to)
   - the creativity of your project and approach
   - the cleanliness of your implementation
+  - the efficiency of your implementation
+  - documentation (both in code and in your readme.txt)
+  - how well you followed instructions (including implementing all concepts required efficiently)
+  - how well you followed good coding practices*
+  
+*While not essential, if you have long utility functions (or hundreds of lines of functions besides main), it would be nice if they were in a separate .c file (with definitions in a corresponding .h file).
