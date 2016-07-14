@@ -25,7 +25,7 @@ gcc astroshark.c -o astroshark -lm -l SDL2 -l SDL2_image
  - Create asteroids to shoot at, using random generation
  	* Random asteroid spawn location, with random velocity
  	* Gets destroyed when hit by laser
- - Create bullets/lasers
+ ~~ - Create bullets/lasers ~~
 
 ### Secondary Goals
  - Create separate sprites for different things

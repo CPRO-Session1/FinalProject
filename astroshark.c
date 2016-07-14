@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.0.7*/
+/*Astroshark v0.1.0*/
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -10,14 +10,16 @@
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
-char windowTitle[18] = {"Astroshark  v0.0.7"}; 																	/*Title of the window*/
+char windowTitle[18] = {"Astroshark  v0.1.0"}; 																	/*Title of the window*/
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 
-typedef struct {
+typedef struct {	
+	int laser_rotate;
+	int deltaX;
+	int deltaY;
 	SDL_Rect laser_dstrect;
 	SDL_Rect laser_srcrect;
-	int laser_rotate;
 } laserInstance;
 
 
@@ -60,51 +62,73 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *
 	deltaY = cos(angle*PI/180) * speed;
 //	printf("deltaX = %f\ndeltaY = %f\nangle = %d\n", deltaX, deltaY, angle);
 
-	switch(quadrant) {																										/*Updates the changes based on correct orientation and deltaX and deltaY*/
-		case 1:
-			*new_posX += deltaX;
-			*new_posY -= deltaY;
-			*new_deltaX = deltaX;
-			*new_deltaY = -1 * deltaY;
-			break;
-		case 2:
-			*new_posX -= deltaY;
-			*new_posY -= deltaX;
-			*new_deltaX = -1 * deltaY;
-			*new_deltaY = -1 * deltaX;
-			break;
-		case 3:
-			*new_posX -= deltaX;
-			*new_posY += deltaY;
-			*new_deltaX = -1 * deltaX;
-			*new_deltaY = deltaY;
-			break;
-		case 4:
-			*new_posX += deltaY;
-			*new_posY += deltaX;
-			*new_deltaY = deltaY;
-			*new_deltaY = deltaX;
-			break;
-		case NORTH:
-			*new_posY -= speed;
-			*new_deltaX = 0;
-			*new_deltaY = -1 * speed;
-			break;
-		case EAST:
-			*new_posX += speed;
-			*new_deltaX = speed;
-			*new_deltaY = 0;
-			break;
-		case SOUTH:
-			*new_posY += speed;
-			*new_deltaX = 0;
-			*new_deltaY = speed;
-			break;
-		case WEST:
-			*new_posX -= speed;
-			*new_deltaX = -1 * speed;
-			*new_deltaY = 0;
-			break;
+	if (new_deltaX != NULL && new_deltaY != NULL) {
+		switch(quadrant) {
+			case 1:
+				*new_deltaX = deltaX;
+				*new_deltaY = -1 * deltaY;
+				break;
+			case 2:
+				*new_deltaX = -1 * deltaY;
+				*new_deltaY = -1 * deltaX;	
+				break;
+			case 3:
+				*new_deltaX = -1 * deltaX;
+				*new_deltaY = deltaY;
+				break;
+			case 4:
+				*new_deltaX = deltaY;
+				*new_deltaY = deltaX;
+				break;
+			case NORTH:
+				*new_deltaX = 0;
+				*new_deltaY = -1 * speed;
+				break;
+			case EAST:
+				*new_deltaX = speed;
+				*new_deltaY = 0;
+				break;
+			case SOUTH:
+				*new_deltaX = 0;
+				*new_deltaY = speed;
+				break;
+			case WEST:
+				*new_deltaX = -1 * speed;
+				*new_deltaY = 0;
+				break;
+		}
+	}
+	if (new_posX != NULL && new_posY != NULL) {
+		switch(quadrant) {																										/*Updates the changes based on correct orientation and deltaX and deltaY*/
+			case 1:
+				*new_posX += deltaX;
+				*new_posY -= deltaY;
+				break;
+			case 2:
+				*new_posX -= deltaY;
+				*new_posY -= deltaX;
+				break;
+			case 3:
+				*new_posX -= deltaX;
+				*new_posY += deltaY;
+				break;
+			case 4:
+				*new_posX += deltaY;
+				*new_posY += deltaX;
+				break;
+			case NORTH:
+				*new_posY -= speed;
+				break;
+			case EAST:
+				*new_posX += speed;
+				break;
+			case SOUTH:
+				*new_posY += speed;
+				break;
+			case WEST:
+				*new_posX -= speed;
+				break;
+		}
 	}
 }
 
@@ -179,7 +203,10 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		laserI[i].laser_dstrect.x = -20;
 		laserI[i].laser_dstrect.y = 0;
 		laserI[i].laser_rotate = 0;
-//		printf("Laser %d Original X: %d Y: %d\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
+		
+		laserI[i].deltaX = 0;
+		laserI[i].deltaY = 0;
+		//		printf("Laser %d Original X: %d Y: %d\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
 	}
 	
 	int laserCount = 0;
@@ -312,11 +339,12 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 
 		if (playerShip_actionShoot == 1) {
 			if (laserCount < laserNum) {
-				if (laserDelay == 0) {	
+				if (laserDelay == 0) {
+					calculateMovement(NULL, NULL, playerShip_rotate, 10, &laserI[laserCount].deltaX, &laserI[laserCount].deltaY);
 					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 8;
 					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 2;
 					laserI[laserCount].laser_rotate = playerShip_rotate;
-
+					
 					laserCount++;
 					laserDelay++;
 				}
@@ -363,6 +391,11 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 
 		SDL_RenderClear(renderer);
 		for (i = 0; i < laserNum; i++) {
+			if (laserI[i].laser_dstrect.x + laserI[i].laser_dstrect.h < WINDOW_WIDTH || laserI[i].laser_dstrect.x + laserI[i].laser_dstrect.h > WINDOW_WIDTH || laserI[i].laser_dstrect.y + laserI[i].laser_dstrect.h < WINDOW_HEIGHT || laserI[i].laser_dstrect.y + laserI[i].laser_dstrect.h > laserI[i].laser_dstrect.y)
+				if (laserCount == 20)
+					laserCount = 0;
+			laserI[i].laser_dstrect.x += laserI[i].deltaX;
+			laserI[i].laser_dstrect.y += laserI[i].deltaY;
 			SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, laserI[i].laser_rotate, &laser_origin, SDL_FLIP_NONE);
 //			printf("%d\tX:%d\tY:%d SRC\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
 		}
