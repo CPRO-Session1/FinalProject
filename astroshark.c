@@ -15,7 +15,7 @@ char windowTitle[18] = {"Astroshark  v0.0.4"}; 																	/*Title of the w
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 
 typedef struct {
-	SDL_Rect laser_dstrect;																					/*Creates ship's destination rectangle, a.k.a. the ship "object"*/
+	SDL_Rect laser_dstrect;
 	SDL_Rect laser_srcrect;
 } laserInstance;
 
@@ -107,6 +107,7 @@ void createShip(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, 
 }
 
 int initializeAstroshark(int *debug) { 																				/*Function for initalizing Astroshark*/
+	int i; //Standard Counter
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) !=0) { 																/*Initalizes SDL while testing if it was successful*/
 		printf("\n\n***ERROR: Unable to initalize SDL: %s\nEND ERROR***\n", SDL_GetError());
 		*debug = 1;
@@ -142,11 +143,26 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	playerShip_dstrect.x = 0;																						/*TEMPSets location to 0, 0, the top left corner*/
 	playerShip_dstrect.y = 0;
 
-
+	int laserNum = 20;
 	SDL_Texture *laserTexture;
-	laserInstance laserI[10];
-	int laserCount = 0;
+	laserInstance laserI[laserNum];
+	for (i = 0; i < laserNum; i++) {
+		createLaser(&gameWindow, &renderer, &laserI[i].laser_dstrect.w, &laserI[i].laser_dstrect.h, &laserTexture);
+		laserI[i].laser_dstrect.w -= 320;
+		laserI[i].laser_dstrect.w /= 10;
+		laserI[i].laser_dstrect.h /= 10;	
+	
+		laserI[i].laser_srcrect.x = 0;
+		laserI[i].laser_srcrect.y = 0;
+		laserI[i].laser_srcrect.w = 160;
+		laserI[i].laser_srcrect.h = 320;
 
+		laserI[i].laser_dstrect.x = i * 10;
+		laserI[i].laser_dstrect.y = 0;
+	}
+	
+	int laserCount = 0;
+	int laserDelay = 0;
 
 	int close_requested = 0;																						/*close requested variable for controlling closed window*/
 
@@ -231,7 +247,9 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 
 			}
 		}
+
 		
+
 		playerShip_deltaX = playerShip_dstrect.x;																	/*Copies ship's position into deltaX and deltaY*/
 		playerShip_deltaY = playerShip_dstrect.y;
 
@@ -270,33 +288,47 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		}
 		if (playerShip_actionShoot == 1) {
 			if (laserCount < 10) {
-				createLaser(&gameWindow, &renderer, &laserI[laserCount].laser_dstrect.w, &laserI[laserCount].laser_dstrect.h, &laserTexture);
-				laserI[laserCount].laser_dstrect.w -= 320;
-				laserI[laserCount].laser_dstrect.w /= 10;
-				laserI[laserCount].laser_dstrect.h /= 10;	
+				if (laserDelay == 0) {
+					if (playerShip_rotate < 90 && playerShip_rotate > 0) {			
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
+					}
+					if (playerShip_rotate < 180 && playerShip_rotate > 90) {
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
+					}
+					if (playerShip_rotate < 270 && playerShip_rotate > 180) {
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
+					}
+					if (playerShip_rotate <= 359 && playerShip_rotate > 270) {	
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
+					}
+					if (playerShip_rotate == NORTH) {
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 8;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 21;
+					}
+					if (playerShip_rotate == EAST) {
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
+					}
+					if (playerShip_rotate == SOUTH) {
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 8;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 21;
+					}
+					if (playerShip_rotate == WEST) {
+						laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
+						laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
+					}
 
-				if (playerShip_rotate < 90 && playerShip_rotate > 0) {																							
-					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
-					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
+					laserCount++;
+					laserDelay++;
 				}
-				if (playerShip_rotate < 180 && playerShip_rotate > 90) {
-					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
-					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
-				}
-				if (playerShip_rotate < 270 && playerShip_rotate > 180) {
-					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
-					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
-				}
-				if (playerShip_rotate <= 359 && playerShip_rotate > 270) {	
-					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
-					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
-				}
-
-				laserCount++;
 			}
 		}
 
-
+ 		
 		if (playerShip_dstrect.x <= 0)																					/*Collision Detection*/
 			playerShip_dstrect.x = 0;
 		if (playerShip_dstrect.x >= WINDOW_WIDTH - playerShip_dstrect.w)
@@ -329,12 +361,15 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 
 		playerShip_srcrect.x = 320 * (playerShip_animationFrame);
 
+		if (laserDelay != 0)
+			laserDelay++;
+		if (laserDelay == 60)
+			laserDelay = 0;
+
 		SDL_RenderClear(renderer);
-		if (laserCount > -1) {
-			int i;
-			for (i = 0; i < laserCount; i++) {
-				SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);																											/*Clears the screen to set color*/
-			}
+		for (i = 0; i < laserNum; i++) {
+			SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);
+			printf("%d\tX:%d\tY:%d SRC\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
 		}
 		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);		/*Copies the texture onto the rect, and rotates it correctly*/
 		SDL_RenderPresent(renderer);																											/*Presents the renderer and draws everything in renderer*/
@@ -363,7 +398,7 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	*debug = 0;
 }
 
-int main(void) {
+int main() {
 	int debug; 																										/*Variable for testing if initialization was successful*/
 	initializeAstroshark(&debug); 																					/*Initalizes Astroshark while referencing the debug variable*/
 	if (debug == 1)
