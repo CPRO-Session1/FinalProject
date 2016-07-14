@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.0.4*/
+/*Astroshark v0.0.5*/
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -10,7 +10,7 @@
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
-char windowTitle[18] = {"Astroshark  v0.0.4"}; 																	/*Title of the window*/
+char windowTitle[18] = {"Astroshark  v0.0.5"}; 																	/*Title of the window*/
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 
