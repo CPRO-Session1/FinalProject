@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.0.6*/
+/*Astroshark v0.0.7*/
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -10,7 +10,7 @@
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
-char windowTitle[18] = {"Astroshark  v0.0.6"}; 																	/*Title of the window*/
+char windowTitle[18] = {"Astroshark  v0.0.7"}; 																	/*Title of the window*/
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 
@@ -18,7 +18,6 @@ typedef struct {
 	SDL_Rect laser_dstrect;
 	SDL_Rect laser_srcrect;
 	int laser_rotate;
-	SDL_Point laser_origin;
 } laserInstance;
 
 
@@ -161,8 +160,8 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	playerShip_dstrect.x = 0;																						/*TEMPSets location to 0, 0, the top left corner*/
 	playerShip_dstrect.y = 0;
 
-	SDL_Point playerShip_center = {16, 24};
 
+	SDL_Point laser_origin = {8, 26};
 	int laserNum = 20;
 	SDL_Texture *laserTexture;
 	laserInstance laserI[laserNum];
@@ -179,6 +178,7 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 
 		laserI[i].laser_dstrect.x = -20;
 		laserI[i].laser_dstrect.y = 0;
+		laserI[i].laser_rotate = 0;
 //		printf("Laser %d Original X: %d Y: %d\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
 	}
 	
@@ -313,15 +313,10 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		if (playerShip_actionShoot == 1) {
 			if (laserCount < laserNum) {
 				if (laserDelay == 0) {	
-					printf("X: %d, Y: %d\n", laserI[laserCount].laser_dstrect.x, laserI[laserCount].laser_dstrect.y);
-					printf("OriginL X: %d, Y: %d\nOriginS X: %d, Y: %d\n", laserI[laserCount].laser_origin.x,laserI[laserCount].laser_origin.y, playerShip_center.x, playerShip_center.y);
 					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 8;
-					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y;
+					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 2;
 					laserI[laserCount].laser_rotate = playerShip_rotate;
-					laserI[laserCount].laser_origin.x = playerShip_center.x;
-					laserI[laserCount].laser_origin.y = playerShip_center.y;
-					printf("Laser %d X: %d, Y: %d\nShip X: %d, Y: %d\n", laserCount, laserI[laserCount].laser_dstrect.x, laserI[laserCount].laser_dstrect.y, playerShip_dstrect.x, playerShip_dstrect.y);
-					printf("OriginL X: %d, Y: %d\nOriginS X: %d, Y: %d\n\n", laserI[laserCount].laser_origin.x,laserI[laserCount].laser_origin.y, playerShip_center.x, playerShip_center.y);
+
 					laserCount++;
 					laserDelay++;
 				}
@@ -368,7 +363,7 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 
 		SDL_RenderClear(renderer);
 		for (i = 0; i < laserNum; i++) {
-			SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, laserI[i].laser_rotate, &laserI[i].laser_origin, SDL_FLIP_NONE);
+			SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, laserI[i].laser_rotate, &laser_origin, SDL_FLIP_NONE);
 //			printf("%d\tX:%d\tY:%d SRC\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
 		}
 		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);		/*Copies the texture onto the rect, and rotates it correctly*/
