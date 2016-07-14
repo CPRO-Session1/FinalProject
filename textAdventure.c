@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <pthread.h>
+#include <stdlib.h>
 /* Have to use #define because using a const throws an error about variables
 being used in array initializers.*/
 #define MAX_MESSAGE_LENGTH 256
@@ -8,25 +10,52 @@ being used in array initializers.*/
 square bracket, and 1 for a space */
 #define MAX_COMMAND_LENGTH 256
 
-typedef struct message{
-    char str[MAX_MESSAGE_LENGTH];
-    /* "time" was already being used somewhere */
-    unsigned int seconds;
-}Message;
+struct threadVars{ /* struct because I can only pass one argument to the threads */
+        unsigned int* gameTime;
+        FILE** finptr; /* double pointer because inputThread might change the file */
+        int* stopPrinting;
+};
 
+/* If there exists a file named "Cameras/<name>.txt", will switch fin to that,
+move the buffer to the first message that comes chronologically after
+previousMessageTime, and returns 1. If the file doesn't exist, returns 0 */
+int switchCamera(char* name, struct threadVars* vars){
+    char path[50];
+    sprintf(path, "./Cameras/%s.txt", name);
+    FILE* open = fopen(path, "r");
+    if(open == NULL) return 0;
+    fclose(*(vars->finptr));
+    *(vars->finptr) = open;
+    int skipTime = 0;
+    int lineDelay;
+    char nextLine[MAX_MESSAGE_LENGTH];
+    while(skipTime < *(vars->gameTime) && fgets(nextLine, MAX_MESSAGE_LENGTH, *(vars->finptr))){
+        sscanf(nextLine, "%d]", &lineDelay);
+        printf("skiptime: %d gametime: %u. skip!\n", skipTime, *(vars->gameTime));
+        skipTime += lineDelay;
+    }
+    return 1;
+}
 
-
-void handlePlayerCommand(char* command, FILE* fin){
+int handlePlayerCommand(char* command, struct threadVars* vars){
     char arg[25]; /* No command has more than one arg */
-    if(sscanf(command, "help")){
-
-    }else if(sscanf(command, "camera %s", arg)){
-
-    }else if(sscanf(command, "quit")){
-
+    if(strcmp(command, "\n") == 0){
+        *(vars->stopPrinting) = !*(vars->stopPrinting);
+    }else if(strstr(command, "help") != NULL){
+        printf("To switch cameras, type \"camera\"\n\
+                To restart, type \"restart\"\n\
+                To quit, type \"quit\"\n");
+    }else if(strstr(command, "camera") != NULL){
+        if(sscanf(command, "camera %s", arg)){
+            if(switchCamera(arg, vars)) return 1;
+            printf("The cameras are: start, cam1, cam2\n");
+        }
+    }else if(strstr(command, "quit") != NULL){
+        exit(0);
     }else{
         printf("Command not recognised. Type \"help\" for a list of commands\n");
     }
+    return 1;
 }
 
 /* Prevents the program from continuing for a certain amount of seconds */
@@ -35,29 +64,19 @@ void delay(unsigned int seconds){
     while(time(0) - start < seconds);
 }
 
-int readNextLine(FILE* fin, int* prevMessageTime){
+int readNextLine(FILE* fin, int* gameTime){
     char input[MAX_MESSAGE_LENGTH];
-    unsigned int hours, minutes, seconds;
-    // fgets(command, MAX_COMMAND_LENGTH, fin);
+    unsigned int timeDelay;
 
-    //char command[256];
-    //fgets(command, 256, fin);
-
-    //if(strstr(command, "_end") != NULL)return 0;
-    if(fscanf(fin, "%u:%u:%u] ", &hours, &minutes, &seconds) == 3){
-
-        minutes += hours * 60;
-        seconds += minutes * 60;
-        int relativeDelay = seconds - *prevMessageTime;
-        *prevMessageTime = seconds;
-        delay(relativeDelay);
+    if(fscanf(fin, "%u] ", &timeDelay)){
         char nextChar = fgetc(fin);
         while(nextChar != '\n' && nextChar != '\0' && nextChar != EOF){
             printf("%c", nextChar);
             nextChar = fgetc(fin);
         }
         printf("\n");
-        //printf("\n");
+        delay(timeDelay);
+        *gameTime += timeDelay;
     }else if(strstr(fgets(input, MAX_MESSAGE_LENGTH, fin), "_end") != NULL){
         return 0;
     }
@@ -65,43 +84,47 @@ int readNextLine(FILE* fin, int* prevMessageTime){
     return 1;
 }
 
+void* outputThread(void* arg){
+    struct threadVars* vars = arg;
+    /* if stopPrinting is true, then it won't even bother checking the other side of
+    the ||s so readNextLine will never be executed. */
+    while(*(vars->stopPrinting) || readNextLine(*(vars->finptr), vars->gameTime));
+    /* because the inputThread is still waiting for input, the user needs to input a quitting command */
+    printf("Game over. Please type \"restart\" or \"quit\"\n");
+}
 
+/* Waits for player input, and then checks if it's a command and if so, executes it */
+void* inputThread(void* arg){
+    struct threadVars* vars = arg;
+    int inputLength = 100;
+    char input[inputLength];
+    while(handlePlayerCommand(
+        fgets(input, inputLength, stdin), vars)
+    );
+}
 
 int main(){
-
-    int inputBuffLen = 20;
-    char inputBuff[inputBuffLen];
-    memset(inputBuff, '\0', inputBuffLen);
-    printf("Buffer success? %d\n", setvbuf(stdin, inputBuff, _IOLBF, inputBuffLen));
-
-    // int length = 1024;
-    // Message messages[length];
-    // readFile(messages, &length);
-
+    int gameTime = 0;
     FILE* fin = fopen("./Cameras/start.txt", "r");
-    int prevMessageTime = 0;
-    while(readNextLine(fin, &prevMessageTime)){
-        // for(int i = 0; i < inputBuffLen; i++) printf("%d, ", inputBuff[i]);
-        // printf("\n");
-        while(strlen(inputBuff) > 0){ /* If the user is inputting something */
-            char playerInput[inputBuffLen];
-            scanf("%s", playerInput);
-            handlePlayerCommand(playerInput, fin);
-        }
-    }
-
-
-    // for(int i = 0; i < length; i++){
-    //     printf("Time: %u, Message: %s\n", messages[i].seconds, messages[i].str);
-    //
-    //     if(strlen(inputBuff) > 0){ /* If the user is inputting something */
-    //         char playerInput[inputBuffLen];
-    //         scanf("%s", playerInput);
-    //         handleCommand(playerInput);
+    int stopPrinting = 0;
+    struct threadVars vars = {&gameTime, &fin, &stopPrinting};
+    pthread_t outpThread;
+    pthread_t inpThread;
+    pthread_create(&outpThread, NULL, outputThread, &vars);
+    pthread_create(&inpThread, NULL, inputThread, &vars);
+    pthread_join(outpThread, NULL);
+    pthread_join(inpThread, NULL);
+    // FILE* fin = fopen("./Cameras/start.txt", "r");
+    // int prevMessageTime = 0;
+    // int inputBuffLen = 50;
+    // char playerInput[inputBuffLen];
+    // while(readNextLine(fin, &prevMessageTime)){
+    //     // for(int i = 0; i < inputBuffLen; i++) printf("%d, ", inputBuff[i]);
+    //     // printf("\n");
+    //     if(feof(stdin) == 0){ /* If the user is inputting something */
+    //         fgets(playerInput, inputBuffLen, stdin);
+    //         handlePlayerCommand(playerInput, fin);
     //     }
-    //
-    //     if(i + 1 < length)
-    //         delay(messages[i + 1].seconds - messages[i].seconds);
     // }
 
     fclose(fin);

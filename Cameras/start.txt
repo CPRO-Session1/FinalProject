@@ -1,12 +1,3 @@
-0:0:0] Hello!
-0:0:1] 1 second
-0:0:2] 2 seconds
-0:0:3] 3 seconds
-0:0:4] 4 seconds
-0:0:5] 5 seconds
-0:0:6] 6 seconds
-0:0:7] 7 seconds
-0:0:8] 8 seconds
-0:0:9] 9 seconds
-0:0:10] 10 seconds
+1] Hello!
+2] Welcome to the text adventure!
 _end
