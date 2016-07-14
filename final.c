@@ -1,6 +1,6 @@
 //Emma ladouceur
 //Create your own adventure game trying to get to class
-
+//Finished
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h> //for the random
