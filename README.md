@@ -18,9 +18,10 @@ Command:
 gcc astroshark.c -o astroshark -lm -l SDL2 -l SDL2_image
 ### Main Goals
  ~~- Create operational window~~
- 	~~* Operating close window button~~
- ~~- Create functional space ship~~
- 	~~* Movement with WASD and rotation with arrow keys~~
+ 	~~ * Operating close window button~~
+ 	~~ *Create boundaries~~
+ ~~ - Create functional space ship~~
+ 	~~ * Movement with WASD and rotation with arrow keys~~
  - Create asteroids to shoot at, using random generation
  	* Random asteroid spawn location, with random velocity
  	* Gets destroyed when hit by laser
@@ -32,9 +33,10 @@ gcc astroshark.c -o astroshark -lm -l SDL2 -l SDL2_image
  	* Main menu
  	* Pause menu
  	* Options
- - Advanced control system simulating actual space flight (acceleration etc.)
+ - Realistic control system simulating actual space flight (acceleration etc.)
  	* Fix rotation center
  	* Add acceleration and "realistic" motion
+ 	* Mouse functionality
  - Powerups
  	* Ultimate Shark mode(god)
  	* Double shoot

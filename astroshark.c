@@ -14,10 +14,23 @@ char windowTitle[18] = {"Astroshark  v0.0.4"}; 																	/*Title of the w
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 
+typedef struct {
+	SDL_Rect laser_dstrect;																					/*Creates ship's destination rectangle, a.k.a. the ship "object"*/
+	SDL_Rect laser_srcrect;
+} laserInstance;
+
+
 void calculateMovement(int *new_posX, int *new_posY, int angle, int speed){											/*Function to calculate movement using my algorithm*/
 	int quadrant = 0;																										/*This Algorithm calculates the direction that the player should move if the W(forwards) key is pressed by using the angle and speed*/
 	float deltaX;																											/*This algorithm involves trigonometry to calculate (using unit circle)*/
 	float deltaY;
+
+	if (angle >= 360)																							/*Checks to see if rotation is greater or less than 0/360*/
+		angle -= 360;
+	if (angle < 0)
+		angle +=360;
+
+
 	if (angle < 90 && angle > 0) {																							/*Sets correct quadrant*/
 		quadrant = 1;
 	}
@@ -78,6 +91,14 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed){					
 	}
 }
 
+void createLaser(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	/*Function to create laser, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
+	SDL_Surface *tempSurface = IMG_Load("resources/lasers_spritesheet_160x320.png");															/*Creates a temporary surface and loads the spritesheet*/
+	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																	/*Sets the texture to the spritesheet on the tempSurface*/
+	SDL_FreeSurface(tempSurface);																											/*Frees the space allocated to the tempSurface*/
+	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);																						/*Sets the width and height of the dstrect to the sprite's texture, essentially binding the texture to the dstrect*/
+}
+
+
 void createShip(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	/*Function to create ship, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
 	SDL_Surface *tempSurface = IMG_Load("resources/playerShip_spritesheet_320x480.png");												/*Creates a temporary surface and loads the spritesheet*/
 	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																/*Sets the texture to the spritesheet on the tempSurface*/
@@ -121,6 +142,12 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	playerShip_dstrect.x = 0;																						/*TEMPSets location to 0, 0, the top left corner*/
 	playerShip_dstrect.y = 0;
 
+
+	SDL_Texture *laserTexture;
+	laserInstance laserI[10];
+	int laserCount = 0;
+
+
 	int close_requested = 0;																						/*close requested variable for controlling closed window*/
 
 	int playerShip_speed = 5;																						/*Default ship speed*/
@@ -141,8 +168,8 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	int playerShip_deltaX = 0;
 	int playerShip_deltaY = 0;
 
-	int playerShip_xPos = 0;
-	int playerShip_yPos = 0;
+	enum playerShip_animation {AT_REST, ENGINE_START, ENGINE_1, ENGINE_2, ENGINE_3, ENGINE_4};
+	int playerShip_animationFrame = AT_REST;
 
 	while (!close_requested) {																						/*Runs loop while the close button is not pressed*/
 		SDL_Event event;
@@ -191,7 +218,7 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 							playerShip_moveRightStrafe = 0;
 							break;
 						case SDL_SCANCODE_SPACE:
-							playerShip_actionShoot;
+							playerShip_actionShoot = 0;
 							break;
 						case SDL_SCANCODE_LEFT:
 							playerShip_rotateLeft = 0;
@@ -217,30 +244,98 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		if (playerShip_rotate < 0)
 			playerShip_rotate +=360;
 
+		
+
 		if (playerShip_moveForward == 1) {																			/*Tests for different key presses*/
 			calculateMovement(&playerShip_deltaX, &playerShip_deltaY, playerShip_rotate, playerShip_speed);
 			playerShip_dstrect.x = playerShip_deltaX;
 			playerShip_dstrect.y = playerShip_deltaY;
-			playerShip_srcrect.x = 640;
+			playerShip_animationFrame++;
+			
 		}
-		if (playerShip_moveBackward == 1)
-			playerShip_dstrect.y += 10;
-		if (playerShip_moveLeftStrafe == 1)
-			playerShip_dstrect.x -= 5;
-		if (playerShip_moveRightStrafe == 1)
-			playerShip_dstrect.x += 5;
+		if (playerShip_moveBackward == 1) {
+			calculateMovement(&playerShip_deltaX, &playerShip_deltaY, playerShip_rotate, -1 * playerShip_speed + 3);
+			playerShip_dstrect.x = playerShip_deltaX;
+			playerShip_dstrect.y = playerShip_deltaY;
+		}
+		if (playerShip_moveLeftStrafe == 1) {
+			calculateMovement(&playerShip_deltaX, &playerShip_deltaY, playerShip_rotate - 90, playerShip_speed - 3);
+			playerShip_dstrect.x = playerShip_deltaX;
+			playerShip_dstrect.y = playerShip_deltaY;
+		}
+		if (playerShip_moveRightStrafe == 1) {
+			calculateMovement(&playerShip_deltaX, &playerShip_deltaY, playerShip_rotate + 90, playerShip_speed - 3);
+			playerShip_dstrect.x = playerShip_deltaX;
+			playerShip_dstrect.y = playerShip_deltaY;
+		}
+		if (playerShip_actionShoot == 1) {
+			if (laserCount < 10) {
+				createLaser(&gameWindow, &renderer, &laserI[laserCount].laser_dstrect.w, &laserI[laserCount].laser_dstrect.h, &laserTexture);
+				laserI[laserCount].laser_dstrect.w -= 320;
+				laserI[laserCount].laser_dstrect.w /= 10;
+				laserI[laserCount].laser_dstrect.h /= 10;	
+
+				if (playerShip_rotate < 90 && playerShip_rotate > 0) {																							
+					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
+					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
+				}
+				if (playerShip_rotate < 180 && playerShip_rotate > 90) {
+					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 21;
+					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
+				}
+				if (playerShip_rotate < 270 && playerShip_rotate > 180) {
+					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
+					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y + 8;
+				}
+				if (playerShip_rotate <= 359 && playerShip_rotate > 270) {	
+					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x - 21;
+					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 8;
+				}
+
+				laserCount++;
+			}
+		}
+
+
+		if (playerShip_dstrect.x <= 0)																					/*Collision Detection*/
+			playerShip_dstrect.x = 0;
+		if (playerShip_dstrect.x >= WINDOW_WIDTH - playerShip_dstrect.w)
+			playerShip_dstrect.x = WINDOW_WIDTH - playerShip_dstrect.w ;
+		if (playerShip_dstrect.y <= -6)
+			playerShip_dstrect.y = -6;
+		if (playerShip_dstrect.y >= WINDOW_HEIGHT - playerShip_dstrect.h + 6)
+			playerShip_dstrect.y = WINDOW_HEIGHT - playerShip_dstrect.h + 6;
+
 
 		if (playerShip_moveForward == 0) {
-			playerShip_srcrect.x = 0;
+			if (playerShip_animationFrame <= AT_REST)
+				playerShip_animationFrame = AT_REST;
+			else
+				playerShip_animationFrame--;
 		}
-		if (playerShip_moveBackward == 0)
-			playerShip_deltaY = 0;
-		if (playerShip_moveLeftStrafe == 0)
-			playerShip_deltaY = 0;
-		if (playerShip_moveRightStrafe == 0)
-			playerShip_deltaY = 0;
-		
-		SDL_RenderClear(renderer);																												/*Clears the screen to set color*/
+//		if (playerShip_moveBackward == 0)
+//			playerShip_deltaY = 0;
+//		if (playerShip_moveLeftStrafe == 0)
+//			playerShip_deltaY = 0;
+//		if (playerShip_moveRightStrafe == 0)
+//			playerShip_deltaY = 0;
+
+//		if (playerShip_actionShoot == 0) {
+
+//		}
+
+		if (playerShip_animationFrame > ENGINE_4)
+			playerShip_animationFrame = ENGINE_1;
+
+		playerShip_srcrect.x = 320 * (playerShip_animationFrame);
+
+		SDL_RenderClear(renderer);
+		if (laserCount > -1) {
+			int i;
+			for (i = 0; i < laserCount; i++) {
+				SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);																											/*Clears the screen to set color*/
+			}
+		}
 		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);		/*Copies the texture onto the rect, and rotates it correctly*/
 		SDL_RenderPresent(renderer);																											/*Presents the renderer and draws everything in renderer*/
 
@@ -260,6 +355,7 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 //	SDL_Delay(3000);
 
 	SDL_DestroyTexture(playerShipTexture);																			/*Destroys Texture*/
+	SDL_DestroyTexture(laserTexture);
 	SDL_DestroyRenderer(renderer);																					/*Destroys Renderer*/
 	SDL_DestroyWindow(gameWindow); 																					/*Destroys the window that gameWindow is pointing to*/
 	SDL_Quit(); 																									/*Cleans up and quits out of SDL*/
