@@ -23,39 +23,31 @@ typedef struct {
 
 } character;
 
-void get_args(char** arg1Ptr , char ** arg2Ptr, char* command)
+void get_args(char* arg1 , char * arg2, char* command) // The input sanitizer, it will return the first arg as the first word, the second as all words after
 {
-	char * commandPtr = command;
-	char *arg1 = (char*) malloc(strlen(command)*sizeof(char));
-	char *arg2 = (char*) malloc(strlen(command)*sizeof(char));
-
-	for(int i = 0; *commandPtr != ' ' && i <= (int) strlen(command); i++)
+	for(int i = 0; i <= (int) strlen(command); i++) //Iterate through commands
 	{
-		arg1[i] = *commandPtr;
-		commandPtr++;
-		if (*commandPtr == '\n' || *commandPtr == ' ')
+		arg1[i] = command[i]; //Copy first word to char
+		if (command[i] == '\n' || command[i] == ' ')//When you reach a space or newline, replace with end char
 		{
 			arg1[i+1] = '\0';
 			break;
 		}
 	}
-	realloc(arg1, (strlen(arg1)+1)*sizeof(char));
-	for(int i = 0; *commandPtr != '\0'; i++)
+	//realloc(arg1, (strlen(arg1)+1)*sizeof(char)); //reallocate string size
+	for(int i = 0; command[i] != '\0'; i++) // repeat for second arg
 	{
-		commandPtr++;
-		arg2[i] = *commandPtr;
-		if (*commandPtr == '\n' || *commandPtr == '\0')
+		arg2[i] = command[i];
+		if (command[i] == '\n')
 		{
 			arg2[i] = '\0';
 			break;
 		}
 	}
-	realloc(arg2, (strlen(arg2)+1)*sizeof(char));
-	*arg1Ptr = arg1;
-	*arg2Ptr = arg2;
+	//realloc(arg2, (strlen(arg2)+1)*sizeof(char));
 }
 
-void print_room_summary(character *playerPtr)
+void print_room_summary(character *playerPtr) // This prints the "HUD" for the player: inventory, items in the room
 {
 	int saw = 0, is_last = 0;
 	printf("|%s|\n", playerPtr->current_room->room_name);
@@ -99,7 +91,7 @@ void print_room_summary(character *playerPtr)
 	}
 	printf("\n\n");
 }
-void take(character * playerPtr, char * item, room * roomPtr, int room_items_size)
+void take(character * playerPtr, char * item, room * roomPtr, int room_items_size) // Transfers an item in the room to inventory. Had to hard code the backpack interaction though
 {
 	int slot = 0;
 	while (playerPtr->inventory[slot] != NULL)
@@ -143,7 +135,7 @@ void take(character * playerPtr, char * item, room * roomPtr, int room_items_siz
 	}
 	printf("I can't find a %s here.", item);
 }
-void moveto(character*playerPtr, char *droom, room * rooms[], char * room_strings[])
+void moveto(character*playerPtr, char *droom, room * rooms[], char * room_strings[]) //Moves character to a connected room. Converts strings to rooms first. Lots of hard coded interactions between rooms. 
 {
 	int connected = 0, found = 0;
 	room *to_room;
@@ -232,13 +224,13 @@ void moveto(character*playerPtr, char *droom, room * rooms[], char * room_string
 	printf("Press enter to continue.\n");
 }
 
-void look(character* playerPtr)
+void look(character* playerPtr) // Prints look statement. This function was not needed honestly
 {
 	printf("\033[2J");
 	printf("%s\n\n\n\n", playerPtr->current_room->look_msg);
 	printf("Press enter to continue.\n");
 }
-void note(character* playerPtr)
+void note(character* playerPtr) // The note system. I could've just iterated but I already had the switch statements set up
 {
 	for (int i = 0; i < playerPtr->inventory_size; i++)
 	{

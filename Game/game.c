@@ -95,12 +95,13 @@ int main()
 			fgets(command+last, n/2, stdin);
 			last = strlen(command);
 		}
-		char *arg1 = "", *arg2 = "";
-		char ** arg1Ptr = &arg1;
-		char ** arg2Ptr = &arg2;
-		get_args(arg1Ptr, arg2Ptr, command);
+		char *arg1 = (char*) malloc(strlen(command)*sizeof(char)); //Dynamically allocate args to size of command
+		char *arg2 = (char*) malloc(strlen(command)*sizeof(char));
+
+		if (strlen(command))
+			get_args(arg1, arg2, command);
 		free(command);
-		/* GET INPUT*/
+				/* GET INPUT*/
 
 		printf("\033[2J");
 		print_room_summary(playerPtr);
@@ -172,9 +173,9 @@ int main()
 			running = 0;
 		else (printf("I don't know how to do that."));
 		/* COMMANDS -------------------------------------------------------*/
+		free(arg1);
+		free(arg2);
 
-		free(*arg1Ptr);
-		free(*arg2Ptr);
 		printf("\n");
 
 	}

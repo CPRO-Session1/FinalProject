@@ -4,3 +4,7 @@ Game/'
 *.swp
 
 Game/a.exe
+
+Game/a.out.dSYM/Contents/Resources/DWARF/a.out
+
+Game/a.out.dSYM/Contents/Info.plist
