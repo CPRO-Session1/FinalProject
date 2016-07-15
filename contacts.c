@@ -23,7 +23,6 @@ void newContact(int categoryNum, newCat* category);
 
 void userSelect(int* a){ // Process what the user wants to do
 	scanf("%d", a);
-	int selected = 0;
 		if (*a == 1){ // Create a new contact
 			categories(1);
 		}else if (*a == 2){ // View categories
@@ -99,7 +98,7 @@ void categories(int choice1){
 				printf("Category successfully created.\n\n");
 			}
 			printf("\nSelect a category to put your new contact in:");
-			printf("(0) Create a new category\n");
+			printf("\n(0) Create a new category\n");
 			categories(2);
 			scanf("%d", &userIn);
 		}
@@ -133,9 +132,6 @@ void categories(int choice1){
 		printf("Select contact: ");
 		scanf("%d", &x);
 
-		printf("Current Details\n");
-		categories(5);
-
 		printf("\nWhat would you like to edit? (1)Name (2)Number (3)Rating (4)Address\n");
 		scanf("%d", &editChoice);
 
@@ -153,9 +149,11 @@ void categories(int choice1){
 					}
 			}while (phone != 2 || enter != '\n');
 		}else if (editChoice == 3){ // rating
+			printf("Enter new rating: ");
 			scanf("%s", category[i].contact[x].rating);
 		}else if (editChoice == 4){ // address
-			scanf("%[^\n]%*c", category[i].contact[x].address);
+			printf("Enter new address: ");
+			scanf(" %[^\n]%*c", category[i].contact[x].address);
 		}
 
 		printf("Updated details successfully.\n");
