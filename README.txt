@@ -1,0 +1,9 @@
+For this project, I made a single player version of yahtzee that prints the dice, allows you to chose the dice you want to reroll, and rerolls them. It then lets you chose which category you want to put the total of the dice into, and stores those numbers on the scorecard, which it reprints as the updated version.
+There were several differences from the original version that I proposed in the proposal. 
+In the proposal, I was going to make the scorecard a large data structure with sections for the score and the category name. I realized though that it would be more effective to have an array, and i made a two dimensional array with the categories and numbers that I updated every time.
+The biggest problem though was that I was not able to figure out how to make my scoring function work. Why I tried originally to do was send a variable through the various functions to everntually reach the scoring function, and update that score.
+This did not work, as I realized that I couldn't pass a variable through multiple functions. I then tried passing a pointer. If I had had more time to work, I might have figured out how to make it work by passing pointers through the functions to eventually reach the score function, but I was not able to make that work becuase I didn't realize I needed it until it was almost due.
+The part that does work well though is the scorecard and dice rolling parts. In order play, you would enter the die you want to reroll, hit enter, enter the next number, and as many times as you want until you want to finally roll, when you hit 6 and hit enter.
+This will run 13 times (one for every category on the scorecard), and if it worked it would print out the final score correctly, but because I could not get the pointers to work, I instead made it complie and run, even if it doesn't work fully.
+To compile and run it, type "gcc yahtzee2.c -o final" and to run it would be "./final"
+
