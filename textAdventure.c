@@ -76,19 +76,23 @@ int switchCamera(char* name, unsigned int gameTime, FILE** finptr){
     while(skipTime < gameTime && fgets(nextLine, MAX_MESSAGE_LENGTH, *finptr)){
         int lineDelay, stringIndex;
         char eventType;
-        sscanf(nextLine, "%c%d] %n", &eventType, &lineDelay, &stringIndex);
-        switch(eventType){
-             /* if it starts with a d, it is an instant event, and because it happened in the past,
-             the message shouldn't print because the player didn't witness it */
-            case 'd':
-                skipTime += lineDelay;
-                break;
-            /* if it starts with a d, it is an ongoing event, and although the player didn't
-            witness it starting, they still see it before it's over, so it should print */
-            case 's':
-                if(skipTime + lineDelay >= gameTime)
-                    printf("%s", nextLine + stringIndex);
-                break;
+        if(sscanf(nextLine, "%c%d] %n", &eventType, &lineDelay, &stringIndex) == 3){
+            switch(eventType){
+                 /* if it starts with a d, it is an instant event, and because it happened in the past,
+                 the message shouldn't print because the player didn't witness it */
+                case 'd':
+                    skipTime += lineDelay;
+                    break;
+                /* if it starts with a d, it is an ongoing event, and although the player didn't
+                witness it starting, they still see it before it's over, so it should print */
+                case 's':
+                    if(skipTime + lineDelay >= gameTime)
+                        printf("%s", nextLine + stringIndex);
+                    break;
+            }
+        }else if(strstr(nextLine, "_end") != NULL || strstr(nextLine, "_exit") != NULL){
+            printf("Camera has already ended. Quitting\n");
+            exit(0);
         }
     }
     return 1;
