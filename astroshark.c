@@ -1,18 +1,34 @@
 /*Sean Kee*/
-/*Astroshark v0.1.0*/
+/*Astroshark v0.1.1*/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <math.h>
 
 #define PI 3.14159265
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
-char windowTitle[18] = {"Astroshark  v0.1.0"}; 																	/*Title of the window*/
+char windowTitle[18] = {"Astroshark  v0.1.1"}; 																	/*Title of the window*/
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
+enum location {TOP, RIGHT, BOTTOM, LEFT};
+
+typedef struct {
+	int rotate;
+	int deltaX;
+	int deltaY;
+	int type;
+	int size;
+	int health;
+	int spawnLocation;
+	SDL_Rect asteroid_dstrect;
+	SDL_Rect asteroid_srcrect;
+	SDL_Rect hitBox;
+} asteroidInstance;
 
 typedef struct {	
 	int laser_rotate;
@@ -132,6 +148,13 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *
 	}
 }
 
+void createAsteroid(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	/*Function to create laser, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
+	SDL_Surface *tempSurface = IMG_Load("resources/asteroid_spritesheet_640x640.png");															/*Creates a temporary surface and loads the spritesheet*/
+	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																	/*Sets the texture to the spritesheet on the tempSurface*/
+	SDL_FreeSurface(tempSurface);																											/*Frees the space allocated to the tempSurface*/
+	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);																						/*Sets the width and height of the dstrect to the sprite's texture, essentially binding the texture to the dstrect*/
+}
+
 void createLaser(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	/*Function to create laser, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
 	SDL_Surface *tempSurface = IMG_Load("resources/lasers_spritesheet_160x320.png");															/*Creates a temporary surface and loads the spritesheet*/
 	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																	/*Sets the texture to the spritesheet on the tempSurface*/
@@ -147,8 +170,12 @@ void createShip(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, 
 	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);																					/*Sets the width and height of the dstrect to the sprite's texture, essentially binding the texture to the dstrect*/
 }
 
+
+
 int initializeAstroshark(int *debug) { 																				/*Function for initalizing Astroshark*/
 	int i; //Standard Counter
+	srand(time(NULL));
+
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) !=0) { 																/*Initalizes SDL while testing if it was successful*/
 		printf("\n\n***ERROR: Unable to initalize SDL: %s\nEND ERROR***\n", SDL_GetError());
 		*debug = 1;
@@ -184,36 +211,6 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	playerShip_dstrect.x = 0;																						/*TEMPSets location to 0, 0, the top left corner*/
 	playerShip_dstrect.y = 0;
 
-
-	SDL_Point laser_origin = {8, 26};
-	int laserNum = 20;
-	SDL_Texture *laserTexture;
-	laserInstance laserI[laserNum];
-	for (i = 0; i < laserNum; i++) {
-		createLaser(&gameWindow, &renderer, &laserI[i].laser_dstrect.w, &laserI[i].laser_dstrect.h, &laserTexture);
-		laserI[i].laser_dstrect.w -= 320;
-		laserI[i].laser_dstrect.w /= 10;
-		laserI[i].laser_dstrect.h /= 10;	
-	
-		laserI[i].laser_srcrect.x = 0;
-		laserI[i].laser_srcrect.y = 0;
-		laserI[i].laser_srcrect.w = 160;
-		laserI[i].laser_srcrect.h = 320;
-
-		laserI[i].laser_dstrect.x = -20;
-		laserI[i].laser_dstrect.y = 0;
-		laserI[i].laser_rotate = 0;
-		
-		laserI[i].deltaX = 0;
-		laserI[i].deltaY = 0;
-		//		printf("Laser %d Original X: %d Y: %d\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
-	}
-	
-	int laserCount = 0;
-	int laserDelay = 0;
-
-	int close_requested = 0;																						/*close requested variable for controlling closed window*/
-
 	int playerShip_speed = 5;																						/*Default ship speed*/
 
 
@@ -235,8 +232,217 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 	enum playerShip_animation {AT_REST, ENGINE_START, ENGINE_1, ENGINE_2, ENGINE_3, ENGINE_4};
 	int playerShip_animationFrame = AT_REST;
 
+
+	SDL_Point laser_origin = {8, 26};
+	int laserTotal = 20;
+	SDL_Texture *laserTexture;
+	laserInstance laser[laserTotal];
+	for (i = 0; i < laserTotal; i++) {
+		createLaser(&gameWindow, &renderer, &laser[i].laser_dstrect.w, &laser[i].laser_dstrect.h, &laserTexture);
+		laser[i].laser_dstrect.w -= 320;
+		laser[i].laser_dstrect.w /= 10;
+		laser[i].laser_dstrect.h /= 10;	
+	
+		laser[i].laser_srcrect.x = 0;
+		laser[i].laser_srcrect.y = 0;
+		laser[i].laser_srcrect.w = 160;
+		laser[i].laser_srcrect.h = 320;
+
+		laser[i].laser_dstrect.x = -20;
+		laser[i].laser_dstrect.y = 0;
+		laser[i].laser_rotate = 0;
+		
+		laser[i].deltaX = 0;
+		laser[i].deltaY = 0;
+//		printf("Laser %d Original W: %d H: %d\n", i, laser[i].laser_dstrect.w, laser[i].laser_dstrect.h);
+	}
+	
+	int laserCount = 0;
+	int laserDelay = 0;
+
+	int asteroid_spawnRate = 0;
+
+	int asteroidDefault = 15;
+	int asteroidDouble = 4;
+	int asteroidGold = 1;
+	SDL_Texture *asteroidTexture;
+	asteroidInstance asteroid[asteroidDefault];
+	for (i = 0; i < asteroidDefault; i++) {
+		createAsteroid(&gameWindow, &renderer, &asteroid[i].asteroid_dstrect.w, &asteroid[i].asteroid_dstrect.h, &asteroidTexture);
+		asteroid[i].asteroid_dstrect.w -= 640;
+		asteroid[i].asteroid_dstrect.h -= 1920;
+		asteroid[i].asteroid_dstrect.w /= (rand() % 50) + 10;
+		asteroid[i].asteroid_dstrect.h = asteroid[i].asteroid_dstrect.w;
+
+		asteroid[i].size = asteroid[i].asteroid_dstrect.w;
+
+		if (asteroid[i].size < 25)
+			asteroid[i].health = 1;
+		if (asteroid[i].size >= 25 && asteroid[i].size < 40)
+			asteroid[i].health = 3;
+		if (asteroid[i].size >= 40)
+			asteroid[i].health = 5;
+
+		asteroid[i].asteroid_srcrect.x = 0;
+		asteroid[i].asteroid_srcrect.y = 0;
+		asteroid[i].asteroid_srcrect.w = 640;
+		asteroid[i].asteroid_srcrect.h = 640;
+
+		asteroid[i].spawnLocation = i % 4;
+
+		switch(asteroid[i].spawnLocation) {
+			case TOP:
+				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
+				asteroid[i].asteroid_dstrect.y = -100;
+				break;
+			case LEFT:
+				asteroid[i].asteroid_dstrect.x = 100;
+				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
+				break;
+			case BOTTOM:
+				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
+				asteroid[i].asteroid_dstrect.y = 100;
+				break;
+			case RIGHT:
+				asteroid[i].asteroid_dstrect.x = -100;
+				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
+				break;
+		}
+
+		asteroid[i].type = (rand() % 3) + 1;
+
+		switch(asteroid[i].type) {
+			case 1:
+				asteroid[i].hitBox.w = asteroid[i].asteroid_dstrect.w / 2;
+				asteroid[i].hitBox.h = asteroid[i].asteroid_dstrect.h * 5 / 8;
+				asteroid[i].hitBox.x = asteroid[i].asteroid_dstrect.x + (asteroid[i].size / 4);
+				asteroid[i].hitBox.y = asteroid[i].asteroid_dstrect.y + (asteroid[i].size - (asteroid[i].size * 5 / 8)) / 2;
+				break;
+			case 2:
+				asteroid[i].asteroid_srcrect.y = 640;
+				asteroid[i].hitBox.w = asteroid[i].asteroid_dstrect.w * 19 / 32;
+				asteroid[i].hitBox.h = asteroid[i].asteroid_dstrect.h * 19 / 32;
+				asteroid[i].hitBox.x = asteroid[i].asteroid_dstrect.x + (asteroid[i].size - (asteroid[i].size * 19 / 32)) / 2;
+				asteroid[i].hitBox.y = asteroid[i].asteroid_dstrect.y + (asteroid[i].size - (asteroid[i].size * 19 / 32)) / 2;
+				break;
+			case 3:
+				asteroid[i].asteroid_srcrect.y = 1280;
+				asteroid[i].hitBox.w = asteroid[i].asteroid_dstrect.w * 19 / 32;
+				asteroid[i].hitBox.h = asteroid[i].asteroid_dstrect.h * 5 / 8;
+				asteroid[i].hitBox.x = asteroid[i].asteroid_dstrect.x + (asteroid[i].size - (asteroid[i].size * 19 / 32)) / 2;
+				asteroid[i].hitBox.y = asteroid[i].asteroid_dstrect.y + (asteroid[i].size - (asteroid[i].size * 5 / 8)) / 2;
+				break;
+		}
+
+
+	}
+/*	for (i = 0; i < laserTotal; i++) {
+		printf("Laser %d W: %d H: %d\n", i, laser[i].laser_dstrect.w, laser[i].laser_dstrect.h);
+	}*/
+
+/*	for (i = (asteroidTotal - asteroidDouble); i < (asteroidTotal - asteroidGold); i++) {
+		createAsteroid(&gameWindow, &renderer, &asteroid[i].asteroid_dstrect.w, &asteroid[i].asteroid_dstrect.h, &asteroidTexture);
+		asteroid[i].asteroid_dstrect.w -= 640;
+		asteroid[i].asteroid_dstrect.h -= 1920;
+		asteroid[i].asteroid_dstrect.w /= (rand() % 30) + 30;
+		asteroid[i].asteroid_dstrect.h = asteroid[i].asteroid_dstrect.w;
+
+		asteroid[i].size = asteroid[i].asteroid_dstrect.w;
+
+		if (asteroid[i].size < 25)
+			asteroid[i].health = 1;
+		if (asteroid[i].size >= 25 && asteroid[i].size < 40)
+			asteroid[i].health = 3;
+		if (asteroid[i].size >= 40)
+			asteroid[i].health = 5;
+
+		asteroid[i].asteroid_srcrect.x = 640;
+		asteroid[i].asteroid_srcrect.y = 1920;
+		asteroid[i].asteroid_srcrect.w = 640;
+		asteroid[i].asteroid_srcrect.h = 640;
+
+		asteroid[i].spawnLocation = i % 4;
+
+		switch(asteroid[i].spawnLocation) {
+			case TOP:
+				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
+				asteroid[i].asteroid_dstrect.y = -100;
+				break;
+			case LEFT:
+				asteroid[i].asteroid_dstrect.x = 100;
+				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
+				break;
+			case BOTTOM:
+				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
+				asteroid[i].asteroid_dstrect.y = 100;
+				break;
+			case RIGHT:
+				asteroid[i].asteroid_dstrect.x = -100;
+				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
+				break;
+		}
+		
+		asteroid[i].type = 5;
+
+		asteroid[i].asteroid_srcrect.y = 1280;
+		asteroid[i].hitBox.w = asteroid[i].asteroid_dstrect.w * 19 / 32;
+		asteroid[i].hitBox.h = asteroid[i].asteroid_dstrect.h * 5 / 8;
+		asteroid[i].hitBox.x = asteroid[i].asteroid_dstrect.x + (asteroid[i].size - (asteroid[i].size * 19 / 32)) / 2;
+		asteroid[i].hitBox.y = asteroid[i].asteroid_dstrect.y + (asteroid[i].size - (asteroid[i].size * 5 / 8)) / 2;
+	}*/
+
+/*	for (i = (asteroidTotal - asteroidGold); i < asteroidTotal; i++) {
+		createAsteroid(&gameWindow, &renderer, &asteroid[i].asteroid_dstrect.w, &asteroid[i].asteroid_dstrect.h, &asteroidTexture);
+		asteroid[i].asteroid_dstrect.w -= 640;
+		asteroid[i].asteroid_dstrect.h -= 1920;
+		asteroid[i].asteroid_dstrect.w /= (rand() % 50) + 10;
+		asteroid[i].asteroid_dstrect.h = asteroid[i].asteroid_dstrect.w;
+
+		asteroid[i].size = asteroid[i].asteroid_dstrect.w;
+
+		asteroid[i].health = 1;
+
+		asteroid[i].asteroid_srcrect.x = 0;
+		asteroid[i].asteroid_srcrect.y = 1920;
+		asteroid[i].asteroid_srcrect.w = 640;
+		asteroid[i].asteroid_srcrect.h = 640;
+
+		asteroid[i].spawnLocation = i % 4;
+
+		switch(asteroid[i].spawnLocation) {
+			case TOP:
+				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
+				asteroid[i].asteroid_dstrect.y = -100;
+				break;
+			case LEFT:
+				asteroid[i].asteroid_dstrect.x = 100;
+				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
+				break;
+			case BOTTOM:
+				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
+				asteroid[i].asteroid_dstrect.y = 100;
+				break;
+			case RIGHT:
+				asteroid[i].asteroid_dstrect.x = -100;
+				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
+				break;
+		}
+
+		asteroid[i].type = 4;
+		asteroid[i].hitBox.w = asteroid[i].asteroid_dstrect.w * 19 / 32;
+		asteroid[i].hitBox.h = asteroid[i].asteroid_dstrect.h * 19 / 32;
+		asteroid[i].hitBox.x = asteroid[i].asteroid_dstrect.x + (asteroid[i].size - (asteroid[i].size * 19 / 32)) / 2;
+		asteroid[i].hitBox.y = asteroid[i].asteroid_dstrect.y + (asteroid[i].size - (asteroid[i].size * 19 / 32)) / 2;
+	} */
+
+/*	for (i = 0; i < laserTotal; i++) {
+		printf("Laser %d W: %d H: %d\n", i, laser[i].laser_dstrect.w, laser[i].laser_dstrect.h);
+	}*/
+
 	int deltaX;
 	int deltaY;
+
+	int close_requested = 0;																						/*close requested variable for controlling closed window*/
 	while (!close_requested) {																						/*Runs loop while the close button is not pressed*/
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -338,12 +544,12 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		}
 
 		if (playerShip_actionShoot == 1) {
-			if (laserCount < laserNum) {
+			if (laserCount < laserTotal) {
 				if (laserDelay == 0) {
-					calculateMovement(NULL, NULL, playerShip_rotate, 10, &laserI[laserCount].deltaX, &laserI[laserCount].deltaY);
-					laserI[laserCount].laser_dstrect.x = playerShip_dstrect.x + 8;
-					laserI[laserCount].laser_dstrect.y = playerShip_dstrect.y - 2;
-					laserI[laserCount].laser_rotate = playerShip_rotate;
+					calculateMovement(NULL, NULL, playerShip_rotate, 10, &laser[laserCount].deltaX, &laser[laserCount].deltaY);
+					laser[laserCount].laser_dstrect.x = playerShip_dstrect.x + 8;
+					laser[laserCount].laser_dstrect.y = playerShip_dstrect.y - 2;
+					laser[laserCount].laser_rotate = playerShip_rotate;
 					
 					laserCount++;
 					laserDelay++;
@@ -368,16 +574,6 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 			else
 				playerShip_animationFrame--;
 		}
-//		if (playerShip_moveBackward == 0)
-//			playerShip_deltaY = 0;
-//		if (playerShip_moveLeftStrafe == 0)
-//			playerShip_deltaY = 0;
-//		if (playerShip_moveRightStrafe == 0)
-//			playerShip_deltaY = 0;
-
-//		if (playerShip_actionShoot == 0) {
-
-//		}
 
 		if (playerShip_animationFrame > ENGINE_4)
 			playerShip_animationFrame = ENGINE_1;
@@ -389,15 +585,20 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		if (laserDelay == 15)
 			laserDelay = 0;
 
+//		for 
+
+
 		SDL_RenderClear(renderer);
-		for (i = 0; i < laserNum; i++) {
-			if (laserI[i].laser_dstrect.x + laserI[i].laser_dstrect.h < WINDOW_WIDTH || laserI[i].laser_dstrect.x + laserI[i].laser_dstrect.h > WINDOW_WIDTH || laserI[i].laser_dstrect.y + laserI[i].laser_dstrect.h < WINDOW_HEIGHT || laserI[i].laser_dstrect.y + laserI[i].laser_dstrect.h > laserI[i].laser_dstrect.y)
-				if (laserCount == 20)
+		for (i = 0; i < laserTotal; i++) {
+			if (laser[i].laser_dstrect.x + laser[i].laser_dstrect.h < WINDOW_WIDTH || laser[i].laser_dstrect.x + laser[i].laser_dstrect.h > WINDOW_WIDTH || laser[i].laser_dstrect.y + laser[i].laser_dstrect.h < WINDOW_HEIGHT || laser[i].laser_dstrect.y + laser[i].laser_dstrect.h > laser[i].laser_dstrect.y) {
+				if (laserCount == 20) {
 					laserCount = 0;
-			laserI[i].laser_dstrect.x += laserI[i].deltaX;
-			laserI[i].laser_dstrect.y += laserI[i].deltaY;
-			SDL_RenderCopyEx(renderer, laserTexture, &laserI[i].laser_srcrect, &laserI[i].laser_dstrect, laserI[i].laser_rotate, &laser_origin, SDL_FLIP_NONE);
-//			printf("%d\tX:%d\tY:%d SRC\n", i, laserI[i].laser_dstrect.x, laserI[i].laser_dstrect.y);
+				}
+			}
+			laser[i].laser_dstrect.x += laser[i].deltaX;
+			laser[i].laser_dstrect.y += laser[i].deltaY;
+			SDL_RenderCopyEx(renderer, laserTexture, &laser[i].laser_srcrect, &laser[i].laser_dstrect, laser[i].laser_rotate, &laser_origin, SDL_FLIP_NONE);
+//			printf("%d\tW:%d\tH:%d\n", i, laser[i].laser_dstrect.w, laser[i].laser_dstrect.h);
 		}
 		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);		/*Copies the texture onto the rect, and rotates it correctly*/
 		SDL_RenderPresent(renderer);																											/*Presents the renderer and draws everything in renderer*/
@@ -407,18 +608,11 @@ int initializeAstroshark(int *debug) { 																				/*Function for inital
 		
 	}
 
-
-
-
-
-
-
-
-
 //	SDL_Delay(3000);
 
 	SDL_DestroyTexture(playerShipTexture);																			/*Destroys Texture*/
 	SDL_DestroyTexture(laserTexture);
+	SDL_DestroyTexture(asteroidTexture);
 	SDL_DestroyRenderer(renderer);																					/*Destroys Renderer*/
 	SDL_DestroyWindow(gameWindow); 																					/*Destroys the window that gameWindow is pointing to*/
 	SDL_Quit(); 																									/*Cleans up and quits out of SDL*/

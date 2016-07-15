@@ -11,7 +11,7 @@ Must have installed:
  - libsdl2-image-dbg
  - libsdl2-image-dev
 
- In SDL Folder,
+ In SDL Folder
 less INSTALL.txt
 
 Command:
