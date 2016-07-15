@@ -37,14 +37,14 @@ DO NOT CLOSE GAME FROM COMMAND PROMPT. EXIT GAME PROPERLY BY HITTING THE "X" ADJ
 
 ### Main Goals
  ~~- Create operational window~~
- 	~~ * Operating close window button~~
- 	~~ *Create boundaries~~
- ~~ - Create functional space ship~~
- 	~~ * Movement with WASD and rotation with arrow keys~~
-~~ - Create asteroids to shoot at, using random generation~~
- ~~	* Random asteroid spawn location, with random velocity~~
-~~ 	* Gets destroyed when hit by laser~~
- ~~ - Create bullets/lasers ~~
+ 	~~* Operating close window button~~
+ 	~~*Create boundaries~~
+ ~~- Create functional space ship~~
+ 	~~* Movement with WASD and rotation with arrow keys~~
+~~- Create asteroids to shoot at, using random generation~~
+ ~~* Random asteroid spawn location, with random velocity~~
+~~* Gets destroyed when hit by laser~~
+ ~~- Create bullets/lasers~~
 
 ### Secondary Goals
  - Create separate sprites for different things
@@ -63,7 +63,7 @@ DO NOT CLOSE GAME FROM COMMAND PROMPT. EXIT GAME PROPERLY BY HITTING THE "X" ADJ
  - Clean Up
  	* Audio (SFX)
  	* Better sprites
- ~~ - Create Scoring System ~~
+ ~~- Create Scoring System~~
 
 ### Additional Comments
 
