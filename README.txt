@@ -19,3 +19,10 @@ Strings will be printed whenever they are set to.
 
 Only one function is necessary throughout my code and it is void main().
 Variables are used everywhere across the code.
+
+Here is what you have to actually input in order to beat the game:
+1
+2
+1
+3
+either 1 or 2 or 3 (1 and 3 leads to bad end while 2 leads to good end)
