@@ -116,8 +116,9 @@ int main ()
 	printf ("Welcome to SET! This is how the game works: There will be 9 cards displayed on your screen. Each card has 3 characteristics: a number(1, 2, 3), a fill(e (empty), f (full), s (striped) ), and a shape(c (circle), s (square), t (triangle) ). These cards can be combined to form a SET. What is a SET you may ask? A SET is three cards, where each characteristic, when looked at individually, is either all the same OR all different. For example, a SET, would be three cards who have all different numbers, all different fills, and all the same shape. Your goal is to find as many SETs as you can! When you spot a set type in the location of each card (the location is the number next to the description of the card). Type the first number then press enter, type the second number then press enter, and lastly type the third number then press enter. If you think there are no SETs on the board, you can request more cards. If you are readytype 'g' and press enter. Good luck!\n"); 
 	char ready;
 	scanf (" %c", &ready);
-	if (ready == 'g' || 'G') {
-		while (1)
+	if (ready == 'g' || 'G')
+	{
+		while (1) {
 			printf ("These are the cards on the board:\n"); 
 			cardsOnBoard(arrayCards, display);
 			/*this conditional statement asks the user if they want more cards as long as there are still more cards available. if the user says yes, more cards are added. */
@@ -186,10 +187,11 @@ int main ()
 				scanf (" %c", &x);
 				if (x == 'Y' || x == 'y') {
 					printf ("You found %d SETs! Congratulations! Thanks for playing!\n", amountOfSets);
-					exit(1);
+					break;
 				}
 			}
 		}
 	
 	}
+}
 
