@@ -1,0 +1,12 @@
+Clarke Littlejohn
+
+
+Online Bank Simulator
+
+The Program would be similiar to the bank project done before but with more features. It would have the user to enter the username
+Then it would search for that persons file after that they would have to enter the password. It would have a record
+of when things were purchased. I would use structs as the basic why to setup an account. File I/O would be the main part of this as all of this 
+would be saved. Most of the thing would be using functions and FileI/O. i dont really see how loops would be that useful.
+
+I am doing this because i have no other ideas also this is the best this i could think of that would help me get use to using FileI/O
+which i see as one of the more important thinds.
