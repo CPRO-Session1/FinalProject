@@ -1,3 +1,7 @@
-1] Hello!
-2] Welcome to the text adventure!
+d3] A man walks into view. He is wearing a suit, although it looks a bit too small.
+s3] There is a man wearing a suit that's a bit too small for him.
+d3] He clears his throat.
+d3] He tightens his tie.
+d2] He clears his throat again.
+d3] Man: Welcome to the text adventure!
 _end
