@@ -1,3 +1,4 @@
+#include "func.c"
 #include "func.h"
 
 int main()

@@ -1,6 +1,5 @@
 #ifndef FUNC_H
 #define FUNC_H
-#include "func.c"
 
 void print_room_summary(character *playerPtr);
 void get_args(char**, char**, char*);
