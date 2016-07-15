@@ -23,6 +23,18 @@ If opening code, use sublime or a text editor that's NOT vim.
 Compile command:
 gcc astroshark.c -o astroshark -lm -l SDL2 -l SDL2_image
 
+### How to play
+W - Move Forward
+A - Strafe Left
+S - Reverse
+D - Strafe Right
+SPACE - Shoot
+Left Arrow - Rotate Left
+Right Arrow - Rotate Right
+
+DO NOT CLOSE GAME FROM COMMAND PROMPT. EXIT GAME PROPERLY BY HITTING THE "X" ADJACENT TO THE WINDOW TITLE.
+
+
 ### Main Goals
  ~~- Create operational window~~
  	~~ * Operating close window button~~
