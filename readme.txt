@@ -1,0 +1,7 @@
+CarrotCore Education Services 
+by Rumeeet Goradia
+
+The objective of this program was to mimic online gradebook programs used by teachers. The functions of CarrotCore are listed in the main menu, which holds 5 options. However, only 2 of these have been coded completely, the reason being I simply ran out of time. There are two causes for this:
+	1. I tried experimenting with a GUI for the past few days. Eventually, it became too complicated to deal with; using the ncurses header file is not as simple as online tutorials make it appear, especially when you have menus within menus within menus So, I essentially wasted time trying to mak the GUI work, even though ultimately I decided not to use it.
+	2. The first do-while statement is messed up, and I cannot figure out why. I asked Ms. Hsu too, and we reached a conclusion that I should hardcode the memory allocation for the username, but doing so still has not helped. Therefore, I have had to go off of base theory and have been unable to test my functions.
+I will continue to update my program and try to fix the do-while statement, but until then, although the program compiles, it will not really. I went beyond my proposal and included file input, and i have included most if not all of the other element requirements. I apologize for the poor quality of the program, but I believe my code is thorough enough to be reviewed. As aforementioned, I will continue to update the program.
