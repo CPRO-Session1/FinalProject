@@ -435,7 +435,7 @@ int quest3;
 scanf(" %d", &quest3);
 if(quest3 == 2){
 	if(quest2 == 3){
-		printf("\n\n\nYou should have been more careful!\n");
+		printf("\n\n\nYou should have been more careful! They caught you, and are deeply offended. You are now forever in social exile!\n");
 		goto end_sim;
 	}
 }
