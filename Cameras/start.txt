@@ -4,4 +4,14 @@ d3] He clears his throat.
 d3] He tightens his tie.
 d2] He clears his throat again.
 d3] Man: Welcome to the text adventure!
+d5] Man: To pause the game, press enter. Try it!
+d3] Man: This game is all about cameras.
+d5] Man: To change cameras, pause the game and type "camera otherCamera"
+d4] Man: Go ahead, I'll wait
+d4] Oh, Hell. The teleprompter's broken
+d3] The man runs to the edge of the camera's view
+d2] The man waves, trying to get someone's attention
+d3] The man makes difficult-to-interpret hand gestures at the person
+d3] The man glares
+d3] The man stage whispers: You're fired
 _end

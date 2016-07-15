@@ -1,0 +1,17 @@
+s27] There is a tired looking man at his desk
+d5] There is a man sleeping at his desk
+d3] He wakes up
+d3] He looks around
+d5] He shrugs and twiddles his thumbs
+d3] He scratches his head
+d3] He closes his eyes
+d5] He starts to fall asleep again
+d1] He wakes up with a start
+d3] Man: Oh! Hello! Welcome to the other camera!
+d1] Man: Erm, that's...
+d1] Man: Uh...
+d3] Man: My teleprompter doesn't say anything else
+d3] The man looks somewhere out of the camera's field of view
+d3] The man appears to be mouthing words at someone
+d3] Man: Erm... TECHNICAL DIFFICULTIES
+_end

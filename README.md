@@ -17,7 +17,5 @@ Witnessed events are events that only print if the player is watching the camera
 Ongoing events are events that only print if the player switches to the camera that the event is on after the event starts and before it stops. The syntax for an ongoing event is `"s<n>] <s>"` where `<n>` is the time, in seconds, between the event starting and the event ending, and `<s>` is the message to be sent
 ### Automatic exit
 To automatically quit the program, put "_end" or "_exit" at the end of the file.
-# Differences from the proposal
-I originally planned to make a game, rather than just a system for the game to run on. The system was significantly more difficult than I expected, and I didn't have any time left to write the story.
 # How to compile it
 to compile it, use `gcc textAdventure.c -o textAdventure -lpthread`

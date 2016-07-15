@@ -32,7 +32,7 @@ int readNextLine(FILE* fin, unsigned int* gameTime, unsigned int* timeDelay){
     int stringIndex = 0;
     fgets(input, MAX_MESSAGE_LENGTH, fin);
     if(sscanf(input, "d%u] %n", timeDelay, &stringIndex)){
-        printf("%d: %s", *gameTime, input + stringIndex);
+        printf("%s", input + stringIndex);
         delay(*timeDelay);
     }else if(sscanf(input, "s%u] ", timeDelay)){
         /* if it's an ongoing event, it should not have a delay */
@@ -128,7 +128,7 @@ void handlePlayerCommand(char* command, unsigned int* gameTime, FILE** finptr, i
             if(switchCamera(arg, *gameTime, finptr, timeDelay)) return;
             /* if no camera is specified or if it is not a valid camera, print out a list of valid cameras
                the list is hardcoded because there is no platform independent way to list files as far as I know */
-            printf("The cameras are: start\n");
+            printf("The cameras are: start, otherCamera\n");
         }
     }else if(strstr(command, "quit") != NULL){
         exit(0);
