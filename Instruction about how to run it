@@ -1,0 +1,12 @@
+Instruction of running my final project.
+
+The main purpose of my code is to calculate the frequency of words appearing in a document the user selected, and print these frequencies into another file the user selected. Finally, sort the frequency with the descending order, and print them into the third file the user selected.
+
+Here is the instruction:
+1. When you see "Type in the name of the file:", please type in the name of a file that you want to calculate the words and their frequencies. You can type anything you like in the file, whatever a word, a sentence, a report, or a news. As soon as you finished type the name of the file, please push "enter" botton.
+2. When you see "Input the unsorted file names for writing:", please enter the name of the file that you want to save all your datas about the word frequency without ordering in. This file must exist before you type in its name. It's better to have an empty file. As soon as you finished typing the name of the unsorting file, please push "enter" botton.
+3. When you see "Input the sorted file names for writing:", please enter the name of the file that you want to save all you sorted datas about the word frequency. This file must exist before you type in its name. It's better to have an empty file. As soon as you finished typing the name of the soring file, please push "enter" botton.
+4.After these three steps, the program stop running. At this time, you can go back to your unsorting file and sorting file, and the result will just lie in these two files. 
+
+IMPORTANT REMINDER:
+Since I have just set the program for 5000 words at max, if you are going to run the program with files that have far more than 5000 kinds of words, please go to my code, and reset a range to make sure that the program will run.
