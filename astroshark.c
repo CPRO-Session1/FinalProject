@@ -94,7 +94,7 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *
 		angle -= 270;
 	}
 /*Sets direction if player is orientated towards an axis*/
-	if (angle == 0) 																										
+	if (angle == 0)
 		quadrant = NORTH;
 	if (angle == 90)
 		quadrant = EAST;
@@ -103,7 +103,7 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *
 	if (angle == 270)
 		quadrant = WEST;
 /*Calculates the change in x and y using trigonometric functions*/
-	deltaX = sin(angle*PI/180) * speed;																						
+	deltaX = sin(angle*PI/180) * speed;
 	deltaY = cos(angle*PI/180) * speed;
 //	printf("deltaX = %f\ndeltaY = %f\nangle = %d\n", deltaX, deltaY, angle);
 
@@ -184,22 +184,24 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *
 /*Frees the space allocated to the tempSurface*/
 /*Sets the width and height of the dstrect to the sprite's texture, essentially binding the texture to the dstrect*/
 void createAsteroid(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	
-	SDL_Surface *tempSurface = IMG_Load("resources/asteroid_spritesheet_640x640.png");															
-	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																	
-	SDL_FreeSurface(tempSurface);																											
-	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);																						
+	SDL_Surface *tempSurface = IMG_Load("resources/asteroid_spritesheet_640x640.png");
+	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);
 }
+
 /*Function to create laser, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
 /*Creates a temporary surface and loads the spritesheet*/
 /*Sets the texture to the spritesheet on the tempSurface*/
 /*Frees the space allocated to the tempSurface*/
 /*Sets the width and height of the dstrect to the sprite's texture, essentially binding the texture to the dstrect*/
 void createLaser(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  	
-	SDL_Surface *tempSurface = IMG_Load("resources/lasers_spritesheet_160x320.png");															
-	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																	
-	SDL_FreeSurface(tempSurface);																											
-	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);																						
+	SDL_Surface *tempSurface = IMG_Load("resources/lasers_spritesheet_160x320.png");
+	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);
 }
+
 
 /*Function to create ship, takes in points because those values have to be used in the game(Double pointers are for pointers to struct pointers)*/
 /*Creates a temporary surface and loads the spritesheet*/
@@ -207,38 +209,38 @@ void createLaser(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer,
 /*Frees the space allocated to the tempSurface*/
 /*Sets the width and height of the dstrect to the sprite's texture, essentially binding the texture to the dstrect*/
 void createShip(struct SDL_Window **gameWindow, struct SDL_Renderer **renderer, int *w, int *h, struct SDL_Texture **spriteTexture) {  
-	SDL_Surface *tempSurface = IMG_Load("resources/playerShip_spritesheet_320x480.png");												
-	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);																
-	SDL_FreeSurface(tempSurface);																										
-	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);																					
+	SDL_Surface *tempSurface = IMG_Load("resources/playerShip_spritesheet_320x480.png");
+	*spriteTexture = SDL_CreateTextureFromSurface(*renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+	SDL_QueryTexture(*spriteTexture, NULL, NULL, w, h);
 }
 
 
 /*Function for initalizing Astroshark*/
-int initializeAstroshark(int *debug) { 																				
+int initializeAstroshark(int *debug) {
 	int i; //Standard Counter
 	int j; //Secondary Counter
 	int playerScore = 0;
 	srand(time(NULL));
 /*Initalizes SDL while testing if it was successful*/
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) !=0) { 																
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) !=0) {
 		printf("\n\n***ERROR: Unable to initalize SDL: %s\nEND ERROR***\n", SDL_GetError());
 		*debug = 1;
 		return 1;
 	}
 	/*Declares the gameWindow(pointer) with datatype SDL_Window*/
-	SDL_Window *gameWindow; 																						
+	SDL_Window *gameWindow;
 	gameWindow = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0); 
 	/*Tests to see if window creation was successful or not */
-	if (gameWindow == NULL) { 																						
+	if (gameWindow == NULL) {
 		printf("\n\n***ERROR: Could not create window: %s\nEND ERROR***\n", SDL_GetError());
 		*debug = 1;
 		return 1;
 	}
-/*Creates Renderer flags*/
+	/*Creates Renderer flags*/
 	/*Creates Renderer*/
-	Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;										
-	SDL_Renderer *renderer = SDL_CreateRenderer(gameWindow, -1, render_flags);												
+	Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+	SDL_Renderer *renderer = SDL_CreateRenderer(gameWindow, -1, render_flags);
 	if(renderer == NULL) {
 		printf("\n\n***ERROR: Failed to create renderer: %s\nEND ERROR***\n", SDL_GetError());
 		*debug = 1;
@@ -248,23 +250,23 @@ int initializeAstroshark(int *debug) {
 /*Creates Source rectangle, to highlight the area in which the correct sprite on the spritesheet is located*/
 /*Creates the Ship's texture*/
 /*Sends the addresses the necessary structs and data to createShip()*/
-	SDL_Rect playerShip_dstrect;																					
-	SDL_Rect playerShip_srcrect = {0, 0, 320, 480};																	
-	SDL_Texture *playerShipTexture;																					
-	createShip(&gameWindow, &renderer, &playerShip_dstrect.w, &playerShip_dstrect.h, &playerShipTexture);			
+	SDL_Rect playerShip_dstrect;
+	SDL_Rect playerShip_srcrect = {0, 0, 320, 480};
+	SDL_Texture *playerShipTexture;
+	createShip(&gameWindow, &renderer, &playerShip_dstrect.w, &playerShip_dstrect.h, &playerShipTexture);
 /*Resizes the width of the rectangle to the size of a single sprite*/
 	/*Scales down the ship*/
-	playerShip_dstrect.w -= 1600;																					
-	playerShip_dstrect.w /= 10;																						
+	playerShip_dstrect.w -= 1600;
+	playerShip_dstrect.w /= 10;
 	playerShip_dstrect.h /= 10;
 
-	playerShip_dstrect.x = WINDOW_WIDTH / 2;																						
+	playerShip_dstrect.x = WINDOW_WIDTH / 2;	
 	playerShip_dstrect.y = WINDOW_HEIGHT / 2;
 /*Default ship speed*/
-	int playerShip_speed = 5;																						
+	int playerShip_speed = 5;
 
 /*Various booleans for different movements*/
-	int playerShip_moveForward = 0;																				
+	int playerShip_moveForward = 0;
 	int playerShip_moveLeftStrafe = 0;
 	int playerShip_moveBackward = 0;
 	int playerShip_moveRightStrafe = 0;
@@ -274,7 +276,7 @@ int initializeAstroshark(int *debug) {
 
 	int playerShip_actionShoot = 0;
 /*Variable for ship rotation angle*/
-	int playerShip_rotate = 0;																						
+	int playerShip_rotate = 0;
 
 	int playerShip_deltaX = 0;
 	int playerShip_deltaY = 0;
@@ -620,7 +622,7 @@ int initializeAstroshark(int *debug) {
 		}
 
  		/*Collision Detection between the ship and the walls*/
-		if (playerShip_dstrect.x <= 0)																					
+		if (playerShip_dstrect.x <= 0)
 			playerShip_dstrect.x = 0;
 		if (playerShip_dstrect.x >= WINDOW_WIDTH - playerShip_dstrect.w)
 			playerShip_dstrect.x = WINDOW_WIDTH - playerShip_dstrect.w ;
@@ -707,8 +709,8 @@ int initializeAstroshark(int *debug) {
 
 		}/*Copies the texture onto the rect, and rotates it correctly*/
 			/*Presents the renderer and draws everything in renderer*/
-		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);		
-		SDL_RenderPresent(renderer);																											
+		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);
+		SDL_RenderPresent(renderer);
 
 
 		SDL_Delay(1000/60);
@@ -716,23 +718,23 @@ int initializeAstroshark(int *debug) {
 	}
 
 	/*Destroys Texture to ensure no memory leaks*/
-	SDL_DestroyTexture(playerShipTexture);																			
+	SDL_DestroyTexture(playerShipTexture);
 	SDL_DestroyTexture(laserTexture);
 	SDL_DestroyTexture(asteroidTexture);
 	/*Destroys Renderer*/
-	SDL_DestroyRenderer(renderer);	
-	/*Destroys the window that gameWindow is pointing to*/																				
-	SDL_DestroyWindow(gameWindow); 
-	/*Cleans up and quits out of SDL*/																					
-	SDL_Quit(); 																								
+	SDL_DestroyRenderer(renderer);
+	/*Destroys the window that gameWindow is pointing to*/
+	SDL_DestroyWindow(gameWindow);
+	/*Cleans up and quits out of SDL*/
+	SDL_Quit();
 
 	*debug = 0;
 }
 
 int main() {
 	/*Variable for testing if initialization was successful*/
-	int debug; 																										
-	initializeAstroshark(&debug); 																					
+	int debug;
+	initializeAstroshark(&debug);
 	if (debug == 1)
 		return 1;
 	else
