@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.4.0*/
+/*Astroshark v0.4.2*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 /*Title of the window*/
-char windowTitle[18] = {"Astroshark  v0.4.0"};
+char windowTitle[18] = {"Astroshark  v0.4.2"};
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 enum location {TOP = 0, RIGHT, BOTTOM, LEFT};
@@ -260,9 +260,21 @@ int initializeAstroshark(int *debug) {
 	SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
 	SDL_RenderPresent(renderer);
 
+	/*Creates End texture*/
 	SDL_Texture *endTexture;
 
-/*Creates ship's destination rectangle, a.k.a. the ship "object"*/
+	SDL_Rect endRect;
+	SDL_Surface *tempSurface2 = IMG_Load("resources/gameOver.png");
+	endTexture = SDL_CreateTextureFromSurface(renderer, tempSurface2);
+	SDL_FreeSurface(tempSurface2);
+	SDL_QueryTexture(endTexture, NULL, NULL, &endRect.w, &endRect.h);
+	endRect.x = 0;
+	endRect.y = 0;
+	endRect.w = WINDOW_WIDTH;
+	endRect.h = WINDOW_HEIGHT;
+
+	
+	/*Creates ship's destination rectangle, a.k.a. the ship "object"*/
 /*Creates Source rectangle, to highlight the area in which the correct sprite on the spritesheet is located*/
 /*Creates the Ship's texture*/
 /*Sends the addresses the necessary structs and data to createShip()*/
@@ -589,15 +601,6 @@ int initializeAstroshark(int *debug) {
 
 		/*Test for end of game*/
 		if (playerLives == 0) {
-			SDL_Rect endRect;
-			SDL_Surface *tempSurface = IMG_Load("resources/gameOver.png");
-			endTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
-			SDL_FreeSurface(tempSurface);
-			SDL_QueryTexture(endTexture, NULL, NULL, &endRect.w, &endRect.h);
-			endRect.x = 0;
-			endRect.y = 0;
-			endRect.w = WINDOW_WIDTH;
-			endRect.h = WINDOW_HEIGHT;
 			SDL_RenderClear(renderer);
 			SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
 			SDL_RenderPresent(renderer);
