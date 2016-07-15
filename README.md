@@ -2,9 +2,13 @@
 ## Sean Kee
 
 ### Instructions
-Must have installed:
- -  In SDL Folder
-less INSTALL.txt and follow instructions on how to install SDL2
+
+Clone entire repository -- MUST HAVE ALL FILES --
+ - git clone https://github.com/MrSkee/FinalProject.git
+
+Must install SDL and SDL_tff.
+ - Go into SDL Directory
+ - type the command './configure; make; make install'
 
 sudo apt-get install these:
  - libsdl2-2.0-0
@@ -27,7 +31,7 @@ gcc astroshark.c -o astroshark -lm -l SDL2 -l SDL2_image
  	~~ * Movement with WASD and rotation with arrow keys~~
 ~~ - Create asteroids to shoot at, using random generation~~
  ~~	* Random asteroid spawn location, with random velocity~~
- 	* Gets destroyed when hit by laser
+~~ 	* Gets destroyed when hit by laser~~
  ~~ - Create bullets/lasers ~~
 
 ### Secondary Goals
@@ -47,7 +51,7 @@ gcc astroshark.c -o astroshark -lm -l SDL2 -l SDL2_image
  - Clean Up
  	* Audio (SFX)
  	* Better sprites
- - Create Scoring System
+ ~~ - Create Scoring System ~~
 
 ### Additional Comments
 
