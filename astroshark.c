@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.2.1*/
+/*Astroshark v0.3.0*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 /*Title of the window*/
-char windowTitle[18] = {"Astroshark  v0.2.1"};
+char windowTitle[18] = {"Astroshark  v0.3.0"};
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 enum location {TOP = 0, RIGHT, BOTTOM, LEFT};
@@ -294,6 +294,8 @@ int initializeAstroshark(int *debug) {
 
 	int playerShip_deltaX = 0;
 	int playerShip_deltaY = 0;
+
+	int playerLives = 3;
 
 	enum playerShip_animation {AT_REST, ENGINE_START, ENGINE_1, ENGINE_2, ENGINE_3, ENGINE_4};
 	int playerShip_animationFrame = AT_REST;
@@ -711,6 +713,12 @@ int initializeAstroshark(int *debug) {
 					asteroid[i].health = 1;
 					playerScore++;
 				}
+			if ((playerShip_dstrect.y >= asteroid[i].asteroid_dstrect.y && playerShip_dstrect.y <= asteroid[i].asteroid_dstrect.y + asteroid[i].asteroid_dstrect.h) && (playerShip_dstrect.x <= asteroid[i].asteroid_dstrect.x + asteroid[i].asteroid_dstrect.w && playerShip_dstrect.x >= asteroid[i].asteroid_dstrect.x)) {
+				asteroid[i].asteroid_dstrect.y = -80;
+				playerShip_dstrect.x = WINDOW_WIDTH / 2;
+				playerShip_dstrect.y = WINDOW_HEIGHT / 2;
+				playerLives--;
+			}
 		}
 
 
