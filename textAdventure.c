@@ -11,6 +11,7 @@ struct threadVars{ /* struct because I can only pass one argument to the threads
         unsigned int* gameTime; /* Time travelers will (hopefully) never try to run this code before 1970 */
         FILE** finptr; /* double pointer because inputThread might change the file */
         int* paused;
+        unsigned int* timeDelay;
 };
 
 /* Prevents the program from continuing for a certain amount of seconds */
@@ -31,8 +32,11 @@ int readNextLine(FILE* fin, unsigned int* gameTime, unsigned int* timeDelay){
     int stringIndex = 0;
     fgets(input, MAX_MESSAGE_LENGTH, fin);
     if(sscanf(input, "d%u] %n", timeDelay, &stringIndex)){
-        printf("%s", input + stringIndex);
+        printf("%d: %s", *gameTime, input + stringIndex);
         delay(*timeDelay);
+    }else if(sscanf(input, "s%u] ", timeDelay)){
+        /* if it's an ongoing event, it should not have a delay */
+        *timeDelay = 0;
     }else if(strstr(input, "_end") != NULL || strstr(input, "_exit") != NULL){
         return 0;
     }
@@ -46,10 +50,10 @@ void* outputThread(void* arg){
     /* store this as a pointer because it might get changed by the other thread */
     int* paused = vars->paused;
     /* declare timeDelay here because readNextLine needs to access the previous line's timeDelay */
-    int timeDelay = 0;
+    int* timeDelay = vars->timeDelay;
     /* if paused is true, then it won't even bother checking the other side of
     the || so readNextLine will never be executed. */
-    while(*paused || readNextLine(*finptr, gameTime, &timeDelay));
+    while(*paused || readNextLine(*finptr, gameTime, timeDelay));
     /* if the code reaches this point, it's time to exit! */
     printf("The end! Feel free to play again using a different camera! Exiting...\n");
     exit(0);
@@ -62,35 +66,40 @@ previousMessageTime */
 /* gameTime: the time, in seconds, since the program started (not including pause time) */
 /* finptr: a pointer to the file stream in question */
 /* returns 1 if the file exists, or 0 if it does not */
-int switchCamera(char* name, unsigned int gameTime, FILE** finptr){
+int switchCamera(char* name, unsigned int gameTime, FILE** finptr, int* timeDelay){
     char path[50];
     sprintf(path, "./Cameras/%s.txt", name);
     FILE* open = fopen(path, "r");
     if(open == NULL) return 0;
     fclose(*finptr); /* close the currently open file to prevent memory leaks */
     *finptr = open;
-    int skipTime = 0;
-
+    unsigned int skipTime = 0;
+    *timeDelay = 0; /* reset the timeDelay so the time doesn't advance when it shouldn't */
     char nextLine[MAX_MESSAGE_LENGTH];
     /* loops until the stream is right before the first message that should be printed at or after the gameTime */
     while(skipTime < gameTime && fgets(nextLine, MAX_MESSAGE_LENGTH, *finptr)){
         int lineDelay, stringIndex;
         char eventType;
-        if(sscanf(nextLine, "%c%d] %n", &eventType, &lineDelay, &stringIndex) == 3){
+
+        //printf("%d\n", sscanf(nextLine, "%c%d] %n", &eventType, &lineDelay, &stringIndex));
+        if(sscanf(nextLine, "%c%d] %n", &eventType, timeDelay, &stringIndex) >= 2){
             switch(eventType){
                  /* if it starts with a d, it is an instant event, and because it happened in the past,
                  the message shouldn't print because the player didn't witness it */
                 case 'd':
-                    skipTime += lineDelay;
+                    skipTime += *timeDelay;
+
                     break;
                 /* if it starts with a d, it is an ongoing event, and although the player didn't
                 witness it starting, they still see it before it's over, so it should print */
                 case 's':
-                    if(skipTime + lineDelay >= gameTime)
+                    if(skipTime + *timeDelay >= gameTime)
                         printf("%s", nextLine + stringIndex);
+                        *timeDelay = 0;
                     break;
             }
         }else if(strstr(nextLine, "_end") != NULL || strstr(nextLine, "_exit") != NULL){
+            printf("%u %u %s\n", gameTime, skipTime, nextLine);
             printf("Camera has already ended. Quitting\n");
             exit(0);
         }
@@ -103,7 +112,7 @@ int switchCamera(char* name, unsigned int gameTime, FILE** finptr){
 /* gameTime: the time, in seconds, since the program started (not including pause time) */
 /* finptr: a pointer to the  event stream that might be changed by a command */
 /* paused: boolean value representing whether or not the output is paused */
-void handlePlayerCommand(char* command, unsigned int* gameTime, FILE** finptr, int* paused){
+void handlePlayerCommand(char* command, unsigned int* gameTime, FILE** finptr, int* paused, unsigned int* timeDelay){
     /* use strcmp here because the string should consist solely of '\n' */
     if(strcmp(command, "\n") == 0){
         *paused = !*paused;
@@ -116,7 +125,7 @@ void handlePlayerCommand(char* command, unsigned int* gameTime, FILE** finptr, i
         char arg[25];
         if(sscanf(command, "camera %s", arg)){
             /* dereference gameTime because there's no reason to expect that it would change during the execution of switchCamera */
-            if(switchCamera(arg, *gameTime, finptr)) return;
+            if(switchCamera(arg, *gameTime, finptr, timeDelay)) return;
             /* if no camera is specified or if it is not a valid camera, print out a list of valid cameras
                the list is hardcoded because there is no platform independent way to list files as far as I know */
             printf("The cameras are: start\n");
@@ -134,18 +143,20 @@ void* inputThread(void* arg){
     unsigned int* gameTime = vars->gameTime;
     FILE** finptr = vars->finptr;
     int* paused = vars->paused;
+    unsigned int* timeDelay = vars->timeDelay;
 
     int inputLength = 100;
     char input[inputLength];
     while(1)
-        handlePlayerCommand(fgets(input, inputLength, stdin), gameTime, finptr, paused);
+        handlePlayerCommand(fgets(input, inputLength, stdin), gameTime, finptr, paused, timeDelay);
 }
 
 int main(){
     int gameTime = 0;
     FILE* fin = fopen("./Cameras/start.txt", "r");
     int paused = 0;
-    struct threadVars vars = {&gameTime, &fin, &paused};
+    int timeDelay = 0;
+    struct threadVars vars = {&gameTime, &fin, &paused, &timeDelay};
     /* declare threads */
     pthread_t outpThread;
     pthread_t inpThread;
