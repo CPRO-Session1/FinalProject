@@ -173,7 +173,7 @@ scanf("%d", &again);
 
 	while(again != 1 && again != 2) {
 		printf("%s\n", invalidMove);
-		printf("Enter  ./a.out  to restart the game qwq!!!\n");
+		printf("Enter  ./final  to restart the game qwq!!!\n");
 		break;	
 	}
 
@@ -183,6 +183,4 @@ while(again == 1); //gives the option of cotinue/terminate the game//
 		
 return;
 
-}
-
-	
+}	
