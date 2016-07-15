@@ -1,0 +1,16 @@
+Matthew Danielson
+Started: 7/10/16
+Finished: 
+Documentation for Final Project
+
+
+Customization Settings
+	Modifying start time - between days 1 and 999 - will increase the difficulty of the game by changing the probability of loot being found and the frequency of raids against the player. The game is balanced around starting on day 1; starting later adds an increasing difficulty curve.
+	Modifying difficult will affect the RNG elements of the game; the game is set, by default, to 2, which gives no modifiers to the player. A difficulty of 1 will give a modifier for the player, while difficulty 3 takes away from the player. The game is balanced around difficulty 2, and chaning this will lead to a respectively easier or more difficult experience.
+
+
+Gameplay:
+	This game does not require any files other than the code itself; it will run within terminal, and uses only default ASCII characters to display all the information the player needs. This game will error check any input the player gives - though being careful is advised, as making the wrong move will not break the game, but it could ruin the player's current campaign
+	Everything else that is essential to playing is detailed within the game-simulation itself. There are specifics to the game that are best for the player to find out as they play - otherwise, there quickly becomes a very apparent best mathematical way to play the game. Thus, I will not detail those numbers here, players must get a feel for the game by playing it, and not by simply plugging the game into a formula. However, the game also does serve as a simulation in this regard; by disregarding the game aspect of this program, users can run this program by making the same choices repeatedly in order to simulation survival of a small group in a theoretical post-apolcalyptical scenario.
+
+
