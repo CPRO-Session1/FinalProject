@@ -1,0 +1,9 @@
+Jack Rosen.
+I am creating a text-based game where you need to escape the cops in a car. 
+The game will tell you how much gas you have, how much space is between you and the cops, how much oil is left, and how far you are from winning. You can win if you are over 30 miles from the cops. And you lose if you are under 5 miles from the cops. The user will be prompted to either go fast, go slow, refill gas, or refill the oil.
+There will be a conditional so the person chooses what they want to do. 
+The loop will keep asking the person what they want to do until they win or lose. 
+The functions will be in use depending on what you input. 
+The structures will hold data about your name, the distance between you and the cops, the amount of gas left, and when you need to change oil. 
+The array will hold your name.
+I chose this program because it uses all of the programming techniques we have learned and it seemed like an interesting way to use it.
