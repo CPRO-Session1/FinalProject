@@ -1,46 +1,10 @@
-# Final Project
-
-## Objectives
-To review and implement concepts learned from class in a self-designed program.
-
-### Description
-You will design, propose, and implement a project of your own choosing.  Your project must implement or include each of the following concepts:
-  - Variables/data types
-  - Input/output
-  - Conditional statements
-  - Loops
-  - Functions
-  - Arrays/strings (either directly or as a pointer)
-  - Advanced data types (structures and enumerated lists) <br>
-
-If it is appropriate to use a header file and/or an external .c file containing utility functions, you should do so.  If you have more than a few functions in your program, this applies to you.
-
-Your program must be well-commented and provide the user with information on how to use your program.  Interaction with the program should be specified within the program as well as within a readme.txt document.  Rules for games should also be included in the readme.txt document.
-Additionally, your code must be written efficiently and handle invalid user input appropriately.  This means that if you have the user enter a number, and the user enters a string or a character, your program should not crash, go into an infinite loop, or produce anything outside of the expected functionality.
-
-Examples of projects include (but are not limited to): game simulators (board games, battle arena, other games), text adventure games, artificial intelligence applications, etc.  
-
-Note:  There may be functionality you wish to include in your project that we have not gone over yet in class.  You can check with your instructor (me) or your TA (Lesley) to see if we intend to go over it or if it is possible.  You may wish to temporarily hardcode data, functionality, etc. until we go over it.  Your final code for those sections should not be hardcoded.
-
-### Part 1: Proposal
-You must submit a proposal that details the following:
-  - Descriptive overview of project (what it does, what game it implements/simulates, etc).  This should be long enough to explain what your program is and what it does/does not do.
-  - Detailed examples of concept implementation (an example each of how you will use functions, loops, etc.).  You do not need to explain how you will use variables or input/output unless it is not inherently obvious.
-  - Your reasons for picking this project (you are interested in game design and wanted to create a game, you think the application is interesting and why, etc.).
-  - Any external libraries you are considering using and what you will use them for.  Keep in mind that most of your code should be your own, and we cannot provide any help for external libraries.  This includes graphics libraries.  You are responsible for learning and figuring them out on your own.  Also detail any code you will use that is not yours.
-
-### Part 2: Project Implementation
-You must implement the project as described in your proposal and conforming to the expectations in the Description section.  
-
-Functions and large code blocks should be documented (have comments briefly explaining their purpose, as well as any parameters or return values, if applicable).
-
-You must include a readme.txt detailing how to run your project, a brief overview of what it does, and a brief explanation of interaction with the program (e.g. “You may enter commands at the >> prompt.  For help/suggestions of commands to enter at any time, type ‘help’.” for a text adventure game).  If your project is a game or game simulator, you should also include any rules as applicable (e.g. “Go Fish is a game of matching cards.  If you suggest a card your opponent has, he/she must give you that card.  Likewise, if the opponent asks for a card you have, you must give him/her that card.  If no card matches, player draws from the pile.  Otherwise, players continue asking for cards until they ask for a card no one has.”).
-
-Your readme.txt should also detail any changes made that do not follow your original proposal and explain why they differ.
+Yael Kelmer's README file. 
 
 
-### Deliverables
-Your proposal should be submitted by 10am on Monday, July 11, 2016.  It will either be approved or modification requested by Monday night.  Note that if you submit your proposal early, it will likely be evaluated early, and you will be able to begin work on your project as soon as it is approved.  Your proposal should be in a .doc, .pdf, or .txt document.
+My final project recreates the card game SET. This is how the game works: There will be 9 cards displayed on your screen. Each card has 3 characteristics: a number(1, 2, 3), a fill(e (empty), f (full), s (striped) ), and a shape(c (circle),s (square), t (triangle) ). These cards can be combined to form a SET. What is a SET you may ask? A SET is three cards, where each characteristic, when looked at individually, is either all the same OR all different. For example, a SET, would be three cards who have all different numbers, all different fills, and all the same shape. Your goal is to find as many SETs as you can! When you spot a set type in the location of each card (the location is the  number next to the description of the card). If you think thereare no SETs on the board, you can request more cards. 
 
-Your project is due Friday, July 15, 2016 at 4pm.  Please submit ALL files (source code, external libraries, data files, and executable).
+The code uses a struct to create the characteristics of the card, which are number, fill, and shape. The code uses 5 functions that I created. These functions generate the deck of cards, shuffle the cards, display the cards on the board, display the necessary cards on the board, and check if the 3 cards that the user selected are in fact a set. Within int main() I use the functions that create the deck of cards and shuffles them. Then I explain the rules of the game to the user. After the user says they are ready, 9 cards are displayed on the board. The user has the option to add more cards (in case there are no SETs on the board) as long as there are more cards in the deck that are available. If the user would like more cards, then 3 more cards are printed on the screen. The user then inputs the locations of the three cards that they think are a set and the code utilizes the function that checks if three cards are a set to check. If it is a SET then the user is told it is a SET and if it is not, the user is told it is not a SET. Once there are no more cards in the deck and all the cards are displayed on the board, the user is asked if they want to stop the game. If they feel that there are no more sets they can say yes and the game stops. If they feel that there are more sets they can continue to play and they will continue to be prompted to stop the game. 
+
+In my proposal I said that I would use UNICODE characters to display the cards. However, as I was coding I realized that I did not know how to implement it, so I displayed the cards in a different manner. 
+
 
