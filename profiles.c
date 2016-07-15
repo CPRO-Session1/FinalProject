@@ -491,6 +491,7 @@ printf("What do you say?\n");
 printf("\n\nYour options are:\n");
 printf("|1.You slip away onto the right path, and leave him walking|2.You tell him politely he is going the wrong way|3.You loudly exclaim, 'Wow, how embarassing for you!|\n");
 int quest6;
+scanf(" %d", &quest6);
 if(quest6 == 1 && quest5 == 3){
 	printf("\nWrong choice! You angered the elf, and he imprisons you!\n");
 	goto end_sim;
