@@ -1,50 +1,32 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "func.h"
 
 
-typedef struct {
-	char * room_name;
-	char * connected_rooms[10];
-	char * items[10];
-	char entrance_msg[200];
-	char description[200];
-	char look_msg[200];
-	int items_size;
-} room;
-
-typedef struct {
-	room * current_room;
-	int has_backpack;
-	int inventory_size;
-	char * inventory[6];
-	int notes_read;
-	int has_poo;
-
-} character;
 
 void get_args(char* arg1 , char * arg2, char* command) // The input sanitizer, it will return the first arg as the first word, the second as all words after
 {
-	for(int i = 0; i <= (int) strlen(command); i++) //Iterate through commands
+	int i = 0, j = 0;
+	for(;i <= (int) strlen(command); i++) //Iterate through commands
 	{
 		arg1[i] = command[i]; //Copy first word to char
 		if (command[i] == '\n' || command[i] == ' ')//When you reach a space or newline, replace with end char
 		{
-			arg1[i+1] = '\0';
+			arg1[i] = '\0';
+			i++;
 			break;
 		}
 	}
-	//realloc(arg1, (strlen(arg1)+1)*sizeof(char)); //reallocate string size
-	for(int i = 0; command[i] != '\0'; i++) // repeat for second arg
+	for(; command[i] != '\0'; j++, i++) // repeat for second arg
 	{
-		arg2[i] = command[i];
+		arg2[j] = command[i];
 		if (command[i] == '\n')
 		{
-			arg2[i] = '\0';
+			arg2[j] = '\0';
 			break;
 		}
 	}
-	//realloc(arg2, (strlen(arg2)+1)*sizeof(char));
 }
 
 void print_room_summary(character *playerPtr) // This prints the "HUD" for the player: inventory, items in the room
@@ -91,7 +73,7 @@ void print_room_summary(character *playerPtr) // This prints the "HUD" for the p
 	}
 	printf("\n\n");
 }
-void take(character * playerPtr, char * item, room * roomPtr, int room_items_size) // Transfers an item in the room to inventory. Had to hard code the backpack interaction though
+void take(character * playerPtr, char * item, room * roomPtr, int room_items_size) // Transfers an item in the room to inventory. Didn't know where else to put the backpack interaction
 {
 	int slot = 0;
 	while (playerPtr->inventory[slot] != NULL)
@@ -135,15 +117,15 @@ void take(character * playerPtr, char * item, room * roomPtr, int room_items_siz
 	}
 	printf("I can't find a %s here.", item);
 }
-void moveto(character*playerPtr, char *droom, room * rooms[], char * room_strings[]) //Moves character to a connected room. Converts strings to rooms first. Lots of hard coded interactions between rooms. 
+void moveto(character*playerPtr, char *droom, room * rooms[]) //Moves character to a connected room. Converts strings to rooms first. Also where I put the interactions with rooms
 {
 	int connected = 0, found = 0;
 	room *to_room;
 	for (int i = 0;;i++)
 	{
-		if (strcmp(room_strings[i], "END") == 0)
+		if (strcmp(rooms[i]->room_name, "END") == 0)
 			break;
-		if (strcmp(droom, room_strings[i]) == 0)
+		if (strcmp(droom, rooms[i]->room_name) == 0)
 		{
 			to_room = rooms[i];
 			found = 1;
@@ -156,42 +138,42 @@ void moveto(character*playerPtr, char *droom, room * rooms[], char * room_string
 			connected = 1;
 			break;
 		}
-		if (strcmp(playerPtr->current_room->connected_rooms[i], "END") == 0)
+		if (strcmp(playerPtr->current_room->connected_rooms[i], "END") == 0) //If we've reached end of list
 		{
 
-			if (i-1 == 0)
+			if (i-1 == 0) //If there's only one connected room
 			{
-				moveto(playerPtr, playerPtr->current_room->connected_rooms[0], rooms, room_strings);
-				return;
+				moveto(playerPtr, playerPtr->current_room->connected_rooms[0], rooms);//move there instead
+				return; //cancel original moveto
 			}
 			break;
 		}
 	}
 
-	if (!found) 	
+	if (!found) //no rooms found	
 	{
-		if (strlen(droom) != 0)
+		if (strlen(droom) != 0) //if they wanted to move somewhere
 			printf("I don't know where that is.");
 
 		return;
 	}
 
-	if (strcmp(playerPtr->current_room->room_name,droom) == 0)
+	if (strcmp(playerPtr->current_room->room_name,droom) == 0) //already in room
 	{
 		printf("You're already here.");
 		return;
 	}
-	if (!connected)
+	if (!connected) //room not connected
 	{
 		printf("I can't get to the %s from here.", to_room->room_name);
 		return;
 	}
-	if (strcmp(playerPtr->current_room->room_name, "bedroom") == 0 && playerPtr->has_backpack == 0)
+	if (strcmp(playerPtr->current_room->room_name, "bedroom") == 0 && playerPtr->has_backpack == 0) //hard coded
 	{
 		printf("I should [take] my backpack before I go.");
 		return;
 	}
-	if (strcmp(to_room->room_name, "kitchen") == 0)
+	if (strcmp(to_room->room_name, "kitchen") == 0) //hard coded
 	{
 		for (int i = 0; i < playerPtr->inventory_size; i++)
 		{
@@ -204,7 +186,7 @@ void moveto(character*playerPtr, char *droom, room * rooms[], char * room_string
 			return;
 		}
 	}
-	if (strcmp(to_room->room_name, "shack") == 0)
+	if (strcmp(to_room->room_name, "shack") == 0) //hard coded again
 	{
 		int has_rkey = 0;
 		for (int i = 0; i < playerPtr->inventory_size; i++)

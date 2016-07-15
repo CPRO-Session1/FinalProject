@@ -1,5 +1,4 @@
 #include "func.c"
-#include "func.h"
 
 int main()
 {
@@ -27,7 +26,7 @@ int main()
 			/*SET YARD----------------------------------*/
 
 	/*SET PARK - there are two versions of park, one with the man and one scared away. Going to park will make you lose.*/
-	room park = {"park", {"QUIT", "END"}, {"nasty death incoming"},{},{},{},1};
+	room park = {"park", {"QUIT", "END"}, {},{},{},{},1};
 	strcpy(park.entrance_msg, "I walk to the park. I try to say hello to the man here.");
 	strcpy(park.description, "There's a man here. Frightened,\nhe pulls out a knife and stabs me."); 
 	strcpy(park.look_msg, "Oh. He's still stabbing me.\nI'm gonna die pretty soon.");
@@ -35,7 +34,7 @@ int main()
 	room park_ran = {"park", {"yard", "treehouse", "QUIT", "END"}, {"note", "dog poo"}, {},{},{}, 2};
 	strcpy(park_ran.entrance_msg, "I walk to the park.");
 	strcpy(park_ran.description, "The park looks nice today.\nThe birds are chirping,\nsun is shining.");
-	strcpy(park_ran.look_msg, "Who didn't clean up their dog's waste?");
+	strcpy(park_ran.look_msg, "Who didn't clean up?");
 	room * parkPtr = &park;
 	/*SET PARK-------------------------------------------------*/
 
@@ -61,9 +60,12 @@ int main()
 	strcpy(quit.look_msg, "Stop looking around. Just leave.");
 	room *quitPtr = &quit;
 	/*SET QUIT*/
+	
+	/* room END for the end of the room list just so I don't have to pass a room list size every time */
+	room end = {"END"};
+	room * endPtr = &end;
 
-	room * roomPtr_list[7] = {startPtr, bedroomPtr, yardPtr, parkPtr, kitchenPtr, shackPtr, quitPtr};
-	char * room_list_strings[8] = {"start", "bedroom", "yard", "park", "kitchen", "shack", "QUIT", "END"};
+	room * roomPtr_list[8] = {startPtr, bedroomPtr, yardPtr, parkPtr, kitchenPtr, shackPtr, quitPtr, endPtr};
 	/* SET ROOMS -----------------------------------------------------------------*/
 
 	/* SET PLAYER */
@@ -78,7 +80,7 @@ int main()
 	printf("\n"); //just for this one line so that everything lines up in the beginning
 	
 	//GAME LOOP -------------------------------------------------------------------------
-	int running = 2;
+	int running = 1;
 	while (running)
 	{
 
@@ -107,9 +109,9 @@ int main()
 		print_room_summary(playerPtr);
 
 		/* EXECUTE COMMANDS -------------------------------------------------------*/
-		if (strcmp(arg1, "goto") == 0 || (strcmp(arg1, "\n") == 0 && strlen(arg2) == 0))
+		if (strcmp(arg1, "goto") == 0)
 		{
-			moveto(playerPtr, arg2, roomPtr_list, room_list_strings);
+			moveto(playerPtr, arg2, roomPtr_list);
 		}
 		else if (strcmp(arg1, "take") == 0)
 		{
@@ -125,7 +127,7 @@ int main()
 		}
 		else if (strcmp(arg1, "yell") == 0)
 		{
-			if (strcmp(playerPtr->current_room->room_name, "yard") == 0 && parkPtr != &park_ran)
+			if (playerPtr->current_room == yardPtr && parkPtr != &park_ran)
 			{
 				printf("\033[2J");
 				printf("The man in the park ran away.\n\n\n\nPress enter to continue.\n");
@@ -133,6 +135,8 @@ int main()
 				parkPtr = &park_ran;
 				roomPtr_list[3] = &park_ran;
 			}
+			else if (playerPtr->current_room == &park)
+				printf("I try to yell for help, but there's a bug that distracts me.");
 			else printf("In the command line, nobody can hear you scream.");
 		}
 		else if (strcmp(arg1, "cook") == 0 && strcmp(arg2, "dog poo") == 0)
@@ -168,14 +172,16 @@ int main()
 				running = 0;
 				printf("The shack's energies pour into me as I give the greatest rap ever delivered.\nTo myself.\nIn a shack.\n");			}
 		}
-		else if (strcmp(arg1, "\n") == 0);
-		else if (strcmp(arg2, "QUIT") == 0 || strcmp(arg1, "QUIT") ==  0)
+		else if (strcmp(arg1, "") == 0);
+		else if (strcmp(arg2, "QUIT") == 0 || strcmp(arg1, "QUIT") ==  0 )
 			running = 0;
 		else (printf("I don't know how to do that."));
 		/* COMMANDS -------------------------------------------------------*/
 		free(arg1);
 		free(arg2);
-
+		
+		if (playerPtr->current_room == quitPtr)
+			running = 0;
 		printf("\n");
 
 	}
