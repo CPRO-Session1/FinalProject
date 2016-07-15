@@ -16,7 +16,7 @@ void help(){ //gives instructions of the game
 	printf("\n\n                      Instructions:");
 	printf("\n ------------------------------------------------------");
 	printf("\n ................... Ava's Quiz Show ....................");
-	printf("\n >> You have to be able to answer 16 questions correctly.");
+	printf("\n >> You have to be able to answer 30 questions correctly.");
 	printf("\n >> All of the questions require fill-in answers.");
 	printf("\n >> This game is case-sensitive, so all answers have to");
 	printf("\n    have the first letter of each word uppercase.");
@@ -44,7 +44,7 @@ int main(void){
 	FILE *answers = fopen(answersFile, "r"); 
 	int i; //variable for loop that checks contestants answers
 	int e; //variable for going through the questions.txt file
-	const int num_ques=15; //includes number of questions
+	const int num_ques=29; //includes number of questions
 	char choice;  //main menu variable
 	int countr = 0; //score
 
@@ -67,7 +67,7 @@ int main(void){
 	printf("\n\t\t________________________________________\n\n");
 
 
-	printf("\n\n\t\tAnswers must all begin with an uppercase letter\n\n\n");
+	printf("\n\n\tAnswers must all begin with an uppercase letter\n\n\n");
 //MAIN MENU SELECTION OPTIONS
 	choice=toupper(getchar());
 	printf("you entered %c\n",choice);
@@ -125,7 +125,8 @@ int main(void){
 			}
 			else if (guess!=ans_arr)
 			{
-				printf("Your guess was incorrect.\n\n\n");
+				printf("Your guess was incorrect.\n");
+				printf("The answer was: %s\n\n\n\n", ans_arr);
 	                }
 	                else 
 			{
@@ -144,12 +145,12 @@ int main(void){
 	//score=countr;
 	//printf("* DIAGNOSTIC -- countr is %d\n",countr);
 	//printf("* DIAGNOSTIC -- score is %d\n",score);
-	if(countr>0 && countr<=10){
+	if(countr>0 && countr<=29){
 		printf("\n\n\t\t************* CONGRATULATIONS **************");
-		printf("\n\t You won %d points! \n", countr);
+		printf("\n\t\t\t   You won %d points! \n", countr);
 	}
 
-	else if(countr==11){ //highest score possible
+	else if(countr==30){ //highest score possible
 		printf("\n\n\n \t\t*********** Nice Job!! ***********");
 		printf("\n\t\t\t\t You are the champion!!!!!!!!!");
 		printf("\n\t\t\t  You won %d points! \n",countr);
