@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.2.0*/
+/*Astroshark v0.2.1*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 /*Title of the window*/
-char windowTitle[18] = {"Astroshark  v0.2.0"};
+char windowTitle[18] = {"Astroshark  v0.2.1"};
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 enum location {TOP = 0, RIGHT, BOTTOM, LEFT};
@@ -341,7 +341,7 @@ int initializeAstroshark(int *debug) {
 		createAsteroid(&gameWindow, &renderer, &asteroid[i].asteroid_dstrect.w, &asteroid[i].asteroid_dstrect.h, &asteroidTexture);
 		asteroid[i].asteroid_dstrect.w -= 640;
 		asteroid[i].asteroid_dstrect.h -= 1920;
-		asteroid[i].asteroid_dstrect.w /= (rand() % 40) + 5;
+		asteroid[i].asteroid_dstrect.w /= (rand() % 30) + 5;
 		asteroid[i].asteroid_dstrect.h = asteroid[i].asteroid_dstrect.w;
 
 		asteroid[i].size = asteroid[i].asteroid_dstrect.w;
@@ -368,18 +368,18 @@ int initializeAstroshark(int *debug) {
 		switch(asteroid[i].spawnLocation) {
 			case TOP:
 				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
-				asteroid[i].asteroid_dstrect.y = -80;
+				asteroid[i].asteroid_dstrect.y = -100;
 				break;
 			case LEFT:
-				asteroid[i].asteroid_dstrect.x = -80;
+				asteroid[i].asteroid_dstrect.x = -100;
 				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
 				break;
 			case BOTTOM:
 				asteroid[i].asteroid_dstrect.x = (rand() % WINDOW_WIDTH);
-				asteroid[i].asteroid_dstrect.y = WINDOW_HEIGHT + 80;
+				asteroid[i].asteroid_dstrect.y = WINDOW_HEIGHT + 100;
 				break;
 			case RIGHT:
-				asteroid[i].asteroid_dstrect.x = WINDOW_WIDTH + 80;
+				asteroid[i].asteroid_dstrect.x = WINDOW_WIDTH + 100;
 				asteroid[i].asteroid_dstrect.y = (rand() % WINDOW_HEIGHT);
 				break;
 		}
@@ -697,7 +697,7 @@ int initializeAstroshark(int *debug) {
 						asteroid[i].health--;	
 						printf("Horizontal Hit Size: %d  Health %d\n", asteroid[i].size, asteroid[i].health);
 						if (asteroid[i].health == 0) {
-							asteroid[i].asteroid_dstrect.x = -80;
+							asteroid[i].asteroid_dstrect.x = WINDOW_WIDTH + 80;
 							asteroid[i].hitBox.x = -80;
 							asteroid[i].health = 1;
 							playerScore++;
@@ -722,10 +722,10 @@ int initializeAstroshark(int *debug) {
 			asteroid[i].hitBox.x += asteroid[i].deltaX;
 			asteroid[i].hitBox.y += asteroid[i].deltaY;
 			asteroid[i].rotate += asteroid[i].rotate;
-			if (asteroid[i].asteroid_dstrect.x <= -150 || asteroid[i].asteroid_dstrect.x >= WINDOW_WIDTH + 150 - asteroid[i].asteroid_dstrect.w) {
+			if (asteroid[i].asteroid_dstrect.x <= -175 || asteroid[i].asteroid_dstrect.x >= WINDOW_WIDTH + 175 - asteroid[i].asteroid_dstrect.w) {
 				asteroid[i].deltaX *= -1;
 			}
-			if (asteroid[i].asteroid_dstrect.y <= -150 ||asteroid[i].asteroid_dstrect.y >= WINDOW_HEIGHT + 150 - asteroid[i].asteroid_dstrect.h) {
+			if (asteroid[i].asteroid_dstrect.y <= -175 ||asteroid[i].asteroid_dstrect.y >= WINDOW_HEIGHT + 175 - asteroid[i].asteroid_dstrect.h) {
 				asteroid[i].deltaY *= -1;
 			}
 			SDL_RenderCopyEx(renderer, asteroidTexture, &asteroid[i].asteroid_srcrect, &asteroid[i].asteroid_dstrect, asteroid[i].rotate, NULL, SDL_FLIP_NONE);
