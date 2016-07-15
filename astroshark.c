@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.3.0*/
+/*Astroshark v0.4.0*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 /*Title of the window*/
-char windowTitle[18] = {"Astroshark  v0.3.0"};
+char windowTitle[18] = {"Astroshark  v0.4.0"};
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 enum location {TOP = 0, RIGHT, BOTTOM, LEFT};
@@ -259,6 +259,8 @@ int initializeAstroshark(int *debug) {
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
 	SDL_RenderPresent(renderer);
+
+	SDL_Texture *endTexture;
 
 /*Creates ship's destination rectangle, a.k.a. the ship "object"*/
 /*Creates Source rectangle, to highlight the area in which the correct sprite on the spritesheet is located*/
@@ -585,6 +587,23 @@ int initializeAstroshark(int *debug) {
 			}
 		}
 
+		/*Test for end of game*/
+		if (playerLives == 0) {
+			SDL_Rect endRect;
+			SDL_Surface *tempSurface = IMG_Load("resources/gameOver.png");
+			endTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+			SDL_FreeSurface(tempSurface);
+			SDL_QueryTexture(endTexture, NULL, NULL, &endRect.w, &endRect.h);
+			endRect.x = 0;
+			endRect.y = 0;
+			endRect.w = WINDOW_WIDTH;
+			endRect.h = WINDOW_HEIGHT;
+			SDL_RenderClear(renderer);
+			SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
+			SDL_RenderPresent(renderer);
+		continue;
+		}
+
 		
 /*Copies ship's position into deltaX and deltaY*/
 		playerShip_deltaX = playerShip_dstrect.x;																	
@@ -685,24 +704,26 @@ int initializeAstroshark(int *debug) {
 				if (laser[j].laser_dstrect.x + laser[j].laser_dstrect.w < WINDOW_WIDTH && laser[j].laser_dstrect.x  > 0 && laser[j].laser_dstrect.y + laser[j].laser_dstrect.h < WINDOW_HEIGHT && laser[j].laser_dstrect.y > 0) {
 					if ((laser[j].laser_dstrect.y >= asteroid[i].asteroid_dstrect.y && laser[j].laser_dstrect.y <= asteroid[i].asteroid_dstrect.y + asteroid[i].asteroid_dstrect.h) && (laser[j].laser_dstrect.x <= asteroid[i].asteroid_dstrect.x + asteroid[i].asteroid_dstrect.w && laser[j].laser_dstrect.x > asteroid[i].asteroid_dstrect.x)) {
 						asteroid[i].health--;
-						printf("Veritcal Hit Size: %d  Health: %d\n", asteroid[i].size, asteroid[i].health);
+						//printf("Veritcal Hit Size: %d  Health: %d\n", asteroid[i].size, asteroid[i].health);
 						if (asteroid[i].health == 0) {
 							asteroid[i].asteroid_dstrect.x = -80;
 							asteroid[i].hitBox.x = -80;
 							asteroid[i].health = 1;
 							playerScore++;
+							printf("Score: %d\n", playerScore);
 						}
 						//laser[j].laser_dstrect.x = -50;
 						//laser[j].laser_dstrect.y = 0;
 					}
 					if ((laser[j].laser_dstrect.x >= asteroid[i].asteroid_dstrect.x && laser[j].laser_dstrect.x <= asteroid[i].asteroid_dstrect.x + asteroid[i].asteroid_dstrect.w) && (laser[j].laser_dstrect.y <= asteroid[i].asteroid_dstrect.y + asteroid[i].asteroid_dstrect.h && laser[j].laser_dstrect.y > asteroid[i].asteroid_dstrect.y)) {
 						asteroid[i].health--;	
-						printf("Horizontal Hit Size: %d  Health %d\n", asteroid[i].size, asteroid[i].health);
+						//printf("Horizontal Hit Size: %d  Health %d\n", asteroid[i].size, asteroid[i].health);
 						if (asteroid[i].health == 0) {
 							asteroid[i].asteroid_dstrect.x = WINDOW_WIDTH + 80;
 							asteroid[i].hitBox.x = -80;
 							asteroid[i].health = 1;
 							playerScore++;
+							printf("Score: %d\n", playerScore);
 						}
 					}
 				}
@@ -754,9 +775,7 @@ int initializeAstroshark(int *debug) {
 		SDL_RenderCopyEx(renderer, playerShipTexture, &playerShip_srcrect, &playerShip_dstrect, playerShip_rotate, NULL, SDL_FLIP_NONE);
 		SDL_RenderPresent(renderer);
 
-
 		SDL_Delay(1000/60);
-		
 	}
 
 	/*Destroys Texture to ensure no memory leaks*/
@@ -764,6 +783,7 @@ int initializeAstroshark(int *debug) {
 	SDL_DestroyTexture(laserTexture);
 	SDL_DestroyTexture(asteroidTexture);
 	SDL_DestroyTexture(titleTexture);
+	SDL_DestroyTexture(endTexture);
 	/*Destroys Renderer*/
 	SDL_DestroyRenderer(renderer);
 	/*Destroys the window that gameWindow is pointing to*/
