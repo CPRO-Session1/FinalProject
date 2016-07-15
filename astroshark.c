@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.1.6*/
+/*Astroshark v0.2.0*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 /*Title of the window*/
-char windowTitle[18] = {"Astroshark  v0.1.6"};
+char windowTitle[18] = {"Astroshark  v0.2.0"};
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 enum location {TOP = 0, RIGHT, BOTTOM, LEFT};
@@ -346,12 +346,14 @@ int initializeAstroshark(int *debug) {
 
 		asteroid[i].size = asteroid[i].asteroid_dstrect.w;
 
-		if (asteroid[i].size < 25)
+		asteroid[i].health = 1;
+		/*ALPHA FEATURE TESTING*/
+		/*if (asteroid[i].size < 25)
 			asteroid[i].health = 1;
 		if (asteroid[i].size >= 25 && asteroid[i].size < 40)
-			asteroid[i].health = 3;
+			asteroid[i].health = 2;
 		if (asteroid[i].size >= 40)
-			asteroid[i].health = 5;
+			asteroid[i].health = 2;*/
 
 		asteroid[i].asteroid_srcrect.x = 0;
 		asteroid[i].asteroid_srcrect.y = 0;
@@ -678,19 +680,37 @@ int initializeAstroshark(int *debug) {
 		/*Tests for collision between asteroid and laser beam*/
 		for (i = 0; i < asteroidDefault; i++) {
 			for (j = 0; j < laserTotal; j++) {
-				if (laser[j].laser_dstrect.x + laser[j].laser_dstrect.h < WINDOW_WIDTH && laser[j].laser_dstrect.x  > 0 && laser[j].laser_dstrect.y + laser[j].laser_dstrect.h < WINDOW_HEIGHT || laser[j].laser_dstrect.y > 0) {
-					if (laser[j].laser_dstrect.y == asteroid[i].hitBox.x || laser[j].laser_dstrect.y == asteroid[i].hitBox.y || laser[j].laser_dstrect.y == asteroid[i].hitBox.x + asteroid[i].hitBox.w || laser[j].laser_dstrect.y == asteroid[i].hitBox.y + asteroid[i].hitBox.h) {
+				if (laser[j].laser_dstrect.x + laser[j].laser_dstrect.w < WINDOW_WIDTH && laser[j].laser_dstrect.x  > 0 && laser[j].laser_dstrect.y + laser[j].laser_dstrect.h < WINDOW_HEIGHT && laser[j].laser_dstrect.y > 0) {
+					if ((laser[j].laser_dstrect.y >= asteroid[i].asteroid_dstrect.y && laser[j].laser_dstrect.y <= asteroid[i].asteroid_dstrect.y + asteroid[i].asteroid_dstrect.h) && (laser[j].laser_dstrect.x <= asteroid[i].asteroid_dstrect.x + asteroid[i].asteroid_dstrect.w && laser[j].laser_dstrect.x > asteroid[i].asteroid_dstrect.x)) {
 						asteroid[i].health--;
+						printf("Veritcal Hit Size: %d  Health: %d\n", asteroid[i].size, asteroid[i].health);
+						if (asteroid[i].health == 0) {
+							asteroid[i].asteroid_dstrect.x = -80;
+							asteroid[i].hitBox.x = -80;
+							asteroid[i].health = 1;
+							playerScore++;
+						}
 						//laser[j].laser_dstrect.x = -50;
 						//laser[j].laser_dstrect.y = 0;
 					}
+					if ((laser[j].laser_dstrect.x >= asteroid[i].asteroid_dstrect.x && laser[j].laser_dstrect.x <= asteroid[i].asteroid_dstrect.x + asteroid[i].asteroid_dstrect.w) && (laser[j].laser_dstrect.y <= asteroid[i].asteroid_dstrect.y + asteroid[i].asteroid_dstrect.h && laser[j].laser_dstrect.y > asteroid[i].asteroid_dstrect.y)) {
+						asteroid[i].health--;	
+						printf("Horizontal Hit Size: %d  Health %d\n", asteroid[i].size, asteroid[i].health);
+						if (asteroid[i].health == 0) {
+							asteroid[i].asteroid_dstrect.x = -80;
+							asteroid[i].hitBox.x = -80;
+							asteroid[i].health = 1;
+							playerScore++;
+						}
+					}
 				}
 			}
-			if (asteroid[i].health == 0) {
-				asteroid[i].asteroid_dstrect.x = -80;
-				asteroid[i].hitBox.x = -80;
-				playerScore++;
-			}
+				if (asteroid[i].health == 0) {
+					asteroid[i].asteroid_dstrect.x = -80;
+					asteroid[i].hitBox.x = -80;
+					asteroid[i].health = 1;
+					playerScore++;
+				}
 		}
 
 
