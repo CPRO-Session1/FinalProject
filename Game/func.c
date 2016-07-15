@@ -35,6 +35,7 @@ void print_room_summary(character *playerPtr) // This prints the "HUD" for the p
 	printf("|%s|\n", playerPtr->current_room->room_name);
 	printf("%s\n\n", playerPtr->current_room->description);
 	
+	//PRINT ROOM'S ITEMS
 	printf("I see");
 	for (int i = 0; i < playerPtr->current_room->items_size; i++)
 	{
@@ -60,6 +61,7 @@ void print_room_summary(character *playerPtr) // This prints the "HUD" for the p
 	if (!saw) printf(" nothing here");
 	printf(".\n");
 
+	//PRINT INVENTORY
 	if (!playerPtr->has_backpack) 
 	{
 		printf("\n\n");
@@ -78,9 +80,9 @@ void take(character * playerPtr, char * item, room * roomPtr, int room_items_siz
 	int slot = 0;
 	while (playerPtr->inventory[slot] != NULL)
 	{
-		slot++;
+		slot++; //find a free slot. This might produce a segfault somehow but I have not been running into errors.
 	}
-	if (slot+1 == playerPtr->inventory_size)
+	if (slot+1 == playerPtr->inventory_size) //no free slots
 	{
 		printf("\033[2J");
 		printf("I have no room left in my bag. Might as well just sit here.");
@@ -88,17 +90,18 @@ void take(character * playerPtr, char * item, room * roomPtr, int room_items_siz
 	}
 	for (int i = 0; i < room_items_size; i++)
 	{
-		if (playerPtr->current_room->items[i] != NULL)
+		if (playerPtr->current_room->items[i] != NULL) //if the item in the room exists. Just to prevent segfaults with strcmp
 		{
-			if(strcmp(playerPtr->current_room->items[i], item) == 0)
+			if(strcmp(playerPtr->current_room->items[i], item) == 0) //if the item we're looking for is in the room
 			{
-				if (strcmp(item, "backpack") == 0)
+				if (strcmp(item, "backpack") == 0) //hardcoded backpack interactions
 				{
-					playerPtr->has_backpack = 1;
-					playerPtr->current_room->items[i] = NULL;
+					playerPtr->has_backpack = 1; //do NOT add to inventory!
+					playerPtr->current_room->items[i] = NULL; //delete from room
 					printf("\033[2J");
 					printf("I can hold things now.\nThere's a note still here! I can [read note].\n\n\n\n");
 					printf("Press enter to continue.\n");
+
 					return;
 				}
 				if (playerPtr->has_backpack == 0)
@@ -106,9 +109,9 @@ void take(character * playerPtr, char * item, room * roomPtr, int room_items_siz
 					printf("I try to pick up the %s, but I hopelessly fumble and drop it.", item);
 					return;
 				}
-				playerPtr->inventory[slot] = playerPtr->current_room->items[i];
-				roomPtr->items[i] = NULL;
-				printf("%s\n", playerPtr->current_room->items[i]);
+				playerPtr->inventory[slot] = playerPtr->current_room->items[i]; //add a copy of the item to inventory
+				roomPtr->items[i] = NULL; //delete
+				printf("%s\n", playerPtr->current_room->items[i]); //reprint summary
 				printf("\033[2J");
 				print_room_summary(playerPtr);
 				return;
@@ -123,17 +126,17 @@ void moveto(character*playerPtr, char *droom, room * rooms[]) //Moves character 
 	room *to_room;
 	for (int i = 0;;i++)
 	{
-		if (strcmp(rooms[i]->room_name, "END") == 0)
+		if (strcmp(rooms[i]->room_name, "END") == 0) //end of rooms list
 			break;
-		if (strcmp(droom, rooms[i]->room_name) == 0)
+		if (strcmp(droom, rooms[i]->room_name) == 0) //we found a room 
 		{
-			to_room = rooms[i];
+			to_room = rooms[i]; //convert the droom string to a room pointer
 			found = 1;
 		}
 	}
 	for (int i = 0;;i++)
 	{
-		if (found && strcmp(playerPtr->current_room->connected_rooms[i], to_room->room_name) == 0)
+		if (found && strcmp(playerPtr->current_room->connected_rooms[i], to_room->room_name) == 0) //check for room in connected_room
 		{
 			connected = 1;
 			break;
@@ -230,7 +233,7 @@ void note(character* playerPtr) // The note system. I could've just iterated but
 	}
 
 	printf("\033[2J");
-	int note_reader = 1;
+	int note_reader = 0;
 	do
 	{
 		switch (note_reader)

@@ -2,7 +2,7 @@
 
 int main()
 {
-	/* SET ROOMS -----------------------------------------------------------------*/
+	/* SET ROOMS ---------------This provides the strings for all the rooms that are coded.--------*/
 	/* SET START --------------------------------*/
 	room start = {"start", {"bedroom","QUIT", "END"},{},{},{},{},0}; 
 	room * startPtr = &start;
@@ -62,23 +62,23 @@ int main()
 	/*SET QUIT*/
 	
 	/* room END for the end of the room list just so I don't have to pass a room list size every time */
-	room end = {"END"};
+	room end = {"END",{},{},{},{},{},0};
 	room * endPtr = &end;
 
 	room * roomPtr_list[8] = {startPtr, bedroomPtr, yardPtr, parkPtr, kitchenPtr, shackPtr, quitPtr, endPtr};
 	/* SET ROOMS -----------------------------------------------------------------*/
 
-	/* SET PLAYER */
+	/* SET PLAYER - mainly all interaction and data modification is through the player/player pointer*/
 	character player = {NULL,0,6,{"note",NULL,NULL,NULL,NULL,NULL},0,0};
 	character * playerPtr = &player;
-	player.current_room = startPtr;
+	player.current_room = startPtr; //put him/her in start
 	/* SET PLAYER */
 
 	/* SETUP INTERFACE */
 	printf("\033[2J");
 	print_room_summary(playerPtr);
-	printf("\n"); //just for this one line so that everything lines up in the beginning
-	
+	printf("\n"); //just so you don't have to press enter twice to start the game.
+
 	//GAME LOOP -------------------------------------------------------------------------
 	int running = 1;
 	while (running)
@@ -90,7 +90,7 @@ int main()
 		printf(">> ");
 		fgets(command, n, stdin); //Take command
 		size_t last = strlen(command);
-		while (command[last-1] != '\n') //stolen from powerpoint
+		while (command[last-1] != '\n') //stolen from powerpoint on dynamic memory. Don't really understand how it works.
 		{
 			n *= 2;
 			command = realloc(command, n);
@@ -125,7 +125,7 @@ int main()
 		{
 			note(playerPtr);
 		}
-		else if (strcmp(arg1, "yell") == 0)
+		else if (strcmp(arg1, "yell") == 0) //some hard-coded commands, yell, cook, rap that don't have their own functions.
 		{
 			if (playerPtr->current_room == yardPtr && parkPtr != &park_ran)
 			{
@@ -163,21 +163,27 @@ int main()
 		}
 		else if (strcmp(arg1, "rap") == 0)
 		{
-			if (playerPtr->notes_read < 5)
+			if (playerPtr->notes_read < 6)
 				printf("I don't know any lyrics!");
 			else if (playerPtr->current_room != shackPtr)
 				printf("My rhythm isn't that good. Plus the acoustics in the %s aren't too great.", playerPtr->current_room->room_name);
 			else 
 			{
 				running = 0;
+				printf("\033[2J");
 				printf("The shack's energies pour into me as I give the greatest rap ever delivered.\nTo myself.\nIn a shack.\n");			}
 		}
 		else if (strcmp(arg1, "") == 0);
 		else if (strcmp(arg2, "QUIT") == 0 || strcmp(arg1, "QUIT") ==  0 )
 			running = 0;
+		else if (strcmp(arg1, "help") == 0)
+		{
+			printf("\033[2J");
+			printf("Available commands are:\n - goto [location] will print out a statement when you move to the room then print out the new room summary\n - take [item will move the item into your inventory\n - look - print a look summary\n - read note - will display collected notes\n - yell - will make you yell.\n - cook (only in kitchen)\n - QUIT - quits game.");
+		}
 		else (printf("I don't know how to do that."));
 		/* COMMANDS -------------------------------------------------------*/
-		free(arg1);
+		free(arg1); 
 		free(arg2);
 		
 		if (playerPtr->current_room == quitPtr)

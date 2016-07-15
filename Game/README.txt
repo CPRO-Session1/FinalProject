@@ -1,5 +1,8 @@
 # Final Project
 
+It’s a text adventure game.
+I picked a text adventure game to do because it seemed accomplishable and I like playing games.
+
 ## Compliation
 gcc game.c
 
@@ -12,6 +15,7 @@ Type in commands at the >> prompt. Available commands are:
  - yell - will make you yell. (doesn't do anything unless you're in the yard)
  - cook (only in kitchen)
  - QUIT - Quits game
+ - help - prints this
 
 ## Differences from proposal
  - Player has more variables, like inventory size, has_poo, has_backpack, notes_read.
@@ -36,7 +40,6 @@ Use these commands in this order:
  - goto park
  - take note
  - take dog poo
- - read note
  - goto yard
  - goto kitchen
  - cook dog poo
@@ -54,3 +57,4 @@ Use these commands to lose the game:
  - goto yard
  - goto park
  - goto anywhere
+alternatively: QUIT or goto QUIT works well.
