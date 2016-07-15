@@ -1,0 +1,19 @@
+The dialect of Elvish you speak is Quenya, derived from one of the oldest Elvish languages, Common Eldarin. In fact, 
+Quenya itself is one of the oldest Elvish languages. Often known as "Elf-Latin", Quenya is considered a scholarly 
+pursuit, being an old, complex and formal language- however, this dialect is mother-tongue to the Elves of Lothlorien. 
+
+Here is short sample phrasebook you may find useful:
+
+                         | ENGLISH                              QUENYA|
+	                 |What are you doing?               Man carat?|
+		         |                                            | 
+		         |Poor fate!                      Faica umbar!| 
+		         |                                            |
+		         |Do you speak Elvish?  Ma istal quet'Eldarin?|
+		         |                                            |
+		         |Farewell                             Namarie|
+		         |                                            |
+		         |I am _(name)_                          Nanye|
+		         |                                            |
+		         |No                                        Ui|
+		         |                                            |

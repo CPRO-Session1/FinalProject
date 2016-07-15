@@ -1,0 +1,18 @@
+The dialect of elvish you speak is Sindarin, language of the Sindar. Sindarin is the most common elven language spoken 
+in Middle Earth. It was derived from an earlier language called Common Telerin. 
+
+Here is a short sample phrasebook you may find useful: 
+
+                           | ENGLISH                         SINDARIN|
+			   |Hi                                  A/a/ |
+			   |                                         | 
+			   |Curses!                           Rhaich!| 
+			   |                                         |
+			   |Do you speak Elvish?      Pedig Edhellen?|
+			   |                                         |
+			   |Goodbye                             Galu |
+			   |                                         |
+			   |I am _(name)_                         Im |
+			   |                                         |
+			   |I don't know                        Iston|
+			   |                                         |
