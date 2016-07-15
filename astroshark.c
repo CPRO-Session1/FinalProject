@@ -1,5 +1,5 @@
 /*Sean Kee*/
-/*Astroshark v0.1.5*/
+/*Astroshark v0.1.6*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 /*Title of the window*/
-char windowTitle[18] = {"Astroshark  v0.1.5"};
+char windowTitle[18] = {"Astroshark  v0.1.6"};
 
 enum direction {NORTH = 5, EAST, SOUTH, WEST};
 enum location {TOP = 0, RIGHT, BOTTOM, LEFT};
@@ -69,16 +69,16 @@ void calculate_asteroidMovement(int *rotate, int *deltaX, int *deltaY, int spawn
 /*This algorithm involves trigonometry to calculate (using unit circle)*/
 void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *new_deltaX, int *new_deltaY) {
 	int quadrant = 0;
-	float deltaX;																											
+	float deltaX;
 	float deltaY;
 /*Checks to see if rotation is greater or less than 0/360*/
-	if (angle >= 360)																							
+	if (angle >= 360)
 		angle -= 360;
 	if (angle < 0)
 		angle +=360;
 
 /*Sets correct quadrant*/
-	if (angle < 90 && angle > 0) {																					
+	if (angle < 90 && angle > 0) {
 		quadrant = 1;
 	}
 	if (angle < 180 && angle > 90) {
@@ -146,7 +146,7 @@ void calculateMovement(int *new_posX, int *new_posY, int angle, int speed, int *
 	}
 
 	if (new_posX != NULL && new_posY != NULL) {
-		switch(quadrant) {																										
+		switch(quadrant) {
 			case 1:
 				*new_posX += deltaX;
 				*new_posY -= deltaY;
@@ -246,6 +246,20 @@ int initializeAstroshark(int *debug) {
 		*debug = 1;
 		return 1;
 	}
+
+	/*Creates Loading Screen*/
+	SDL_Texture *titleTexture;
+	SDL_Rect titleRect;
+	SDL_Surface *tempSurface = IMG_Load("resources/title.png");
+	titleTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+	SDL_QueryTexture(titleTexture, NULL, NULL, &titleRect.w, &titleRect.h);
+	titleRect.x = 0;
+	titleRect.y = 0;
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
+	SDL_RenderPresent(renderer);
+
 /*Creates ship's destination rectangle, a.k.a. the ship "object"*/
 /*Creates Source rectangle, to highlight the area in which the correct sprite on the spritesheet is located*/
 /*Creates the Ship's texture*/
@@ -721,6 +735,7 @@ int initializeAstroshark(int *debug) {
 	SDL_DestroyTexture(playerShipTexture);
 	SDL_DestroyTexture(laserTexture);
 	SDL_DestroyTexture(asteroidTexture);
+	SDL_DestroyTexture(titleTexture);
 	/*Destroys Renderer*/
 	SDL_DestroyRenderer(renderer);
 	/*Destroys the window that gameWindow is pointing to*/
