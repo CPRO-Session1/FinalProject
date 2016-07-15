@@ -1,0 +1,19 @@
+Emma Ladouceur
+
+Final Project Proposal
+
+I want to make a create your own adventure game. It will be about someone trying to get to class starting from somewhere in the city. Probably Bowling green because its the bottom of Manhattan. From there people can choice things such as Bus or Train and other things in order to get uptown to columbia.
+
+What will I use? 
+
+I will use a lot of if else statements for the user choice and I'll use a structure for the user. When you start you can create a player and that will be for example Player1 and it will be a deftype stuct Player. I'll then use functions so that I'm not running everything in the main, so each decision can be through a function. Rather than put in strings the user will input numbers and it will lead to another portion of the story. I think I'll have like three layers of stories or however much I have time for. 
+
+Why?
+I think this project will be a good way to sum up what I've learned in the class. Also I'm a commuter student so it will be fun to use my commute as an example. Although intially I wanted to use graphics after looking into it I think that it won't be a good way to conclude what I've learned in the class so I'm going with the create your own adventure. Thank you!
+
+
+ADDITION
+	For the array I think I'll do a score that decreases with every decision. The more decisions it takes you to make it to the final, the lower score you get out of 100. It will be included in the struct with arrays which will save data about the player. 
+
+
+Emma. 
