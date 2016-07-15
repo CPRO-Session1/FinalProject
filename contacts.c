@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct contact{ // Make a new contact
+typedef struct contact{
 	char name[100];
 	int telnum;
 	char rating[4];
@@ -14,11 +14,11 @@ typedef struct contact{ // Make a new contact
 typedef struct category{
 	char cname[100];
 	int contactCount;
-	newCon contact[50];
+	newCon contact[50]; // Contacts are created under categories
 }newCat;
 
 void userSelect(int* a);
-void categories(int choice1);
+void categories(int choice);
 void newContact(int categoryNum, newCat* category);
 
 void userSelect(int* a){ // Process what the user wants to do
@@ -33,42 +33,45 @@ void userSelect(int* a){ // Process what the user wants to do
 			categories(4);
 		}else if (*a == 5){ // Exit
 			
-		}else{
-			printf("Invalid selection. Please try again:\n");
+		}else{ // Invalid input
+			printf("\nInvalid selection. Please try again:\n");
 			userSelect(a);
 		}
 }
 
-void newContact(int categoryNum, newCat* category){ // Add a new contact
+void newContact(int categoryNum, newCat* category){ // Adds a new contact
 	int *conCountPtr = &(category[categoryNum].contactCount); // Counts number of contacts within chosen category
 	char enter; // Checks for \n symbol
 	int phone; // evaluates scanf
+
 	// Create a new contact
 	printf("New Contact\n");
+
 	printf("Enter full name: ");
-	scanf(" %[^\n]%*c", category[categoryNum].contact[*conCountPtr].name);
+	scanf(" %[^\n]%*c", category[categoryNum].contact[*conCountPtr].name); // reads everything, even space characters, until it hits \n
 
 	do{ // gets phone number and makes sure it is only made of integers
 		printf("Enter phone number: ");
 		phone = scanf("%d%c", &category[categoryNum].contact[*conCountPtr].telnum, &enter);
-		if (phone != 2 || enter != '\n'){
+		if (phone != 2 || enter != '\n'){ // checks if the only character in input is the \n symbol (this would be true for integer inputs
 			printf("Invalid number, try again.\n");
-			while (getchar() != '\n')
+			while (getchar() != '\n') // clears input buffer
 			;
 		}
-	}while (phone != 2 || enter != '\n');
+	}while (phone != 2 || enter != '\n'); // while the input is not purely an integer value...
 
 	printf("Enter rating: ");
 	scanf(" %s", category[categoryNum].contact[*conCountPtr].rating);
-	
+
+	while (getchar() != '\n');
 	printf("Enter address: ");
 	scanf(" %[^\n]%*c", category[categoryNum].contact[*conCountPtr].address);
 	
 	printf("Contact successfully added.\n\n");
-	(*conCountPtr)++;
+	(*conCountPtr)++; // Increments the number of contacts within the chosen category
 }
 
-void categories(int choice1){
+void categories(int choice){ // Does category-related work
 	static int catCount = 0; // counts number of existing categories
 	static newCat category[10]; // creates an array of categories
 	newCat *catPtr = category; // pointer to array of categories for functions
@@ -76,41 +79,41 @@ void categories(int choice1){
 	int i = 0; // index for category array
 	int x = 0; // index for contacts array inside the contacts array
 	int *conCount = &category[i].contactCount; // pointer to number of contacts in array
-	int cat = 0;
-	int cont = 0;
 	int phone;
 	char enter;
+	int editChoice; // User's input for choosing what detail of contact to edit
 
-
-	if (choice1 == 1){ // Select a category to put your contact in
+	if (choice == 1){ // Select a category to put your contact in
 		printf("\nSelect a category to put your new contact in:\n");
 		printf("(0) Create a new category\n");
 		categories(2);
 		scanf("%d", &userIn); // Create new category or choose existing
-
-		while (userIn < 1){
-
-			if (userIn == 0){ // Creating a new category
-				catCount++; // Increases count of categories
-				printf("\nEnter name of new category: ");
-				scanf(" %[^\n]%*c", category[catCount].cname); // Renames new category
-				category[catCount].contactCount = 0;
-				printf("Category successfully created.\n\n");
-			}
+		while (userIn == 0){ // While user has chosen to create a new category
+			catCount++; // Increases count of categories
+			printf("\nEnter name of new category: ");
+			scanf(" %[^\n]%*c", category[catCount].cname); // Names new category
+			category[catCount].contactCount = 0; // Sets number of contacts to 0
+			printf("Category successfully created.\n\n");
+		
 			printf("\nSelect a category to put your new contact in:");
 			printf("\n(0) Create a new category\n");
 			categories(2);
 			scanf("%d", &userIn);
 		}
-		newContact(userIn, catPtr); // arg1 is number of categories, arg2 is pointer to category array
-	} else if (choice1 == 2){ // Print categories with contacts underneath
-		for (i = 1; i <= catCount; i++){
+		if (userIn <= catCount){ // checks if user input is one of the choices listed
+			newContact(userIn, catPtr); // arg1 is number of categories, arg2 is pointer to category array
+		}else{
+			printf("\n\nInvalid selection. Please try again: \n\n");
+			categories(1);
+		}
+	} else if (choice == 2){ // Print categories with contacts underneath
+		for (i = 1; i <= catCount; i++){ // For each category
 			printf("\n(%d) %s\n", i, category[i].cname);
-			for (x = 0; x < category[i].contactCount; x++){
-				printf("- %d. %s\n", x, category[i].contact[x].name);
+			for (x = 0; x < category[i].contactCount; x++){ // For each contact under a single category
+				printf("- (%d) %s\n", x, category[i].contact[x].name);
 			}
 		}
-	} else if (choice1 == 3){ // Prints categories and contacts
+	} else if (choice == 3){ // Prints categories and contacts
 		categories(2);
 		printf("\nSelect category: ");
 		scanf("%d", &i);
@@ -123,9 +126,8 @@ void categories(int choice1){
 			printf("Rating: %s\n", category[i].contact[x].rating);
 			printf("Address: %s\n", category[i].contact[x].address);
 		}
-	}else if (choice1 == 4){ // Edits contact Details		
-		int editChoice = 0;
-
+	}else if (choice == 4){ // Edits contact Details		
+		int editChoice = 0; // accepts input from user to edit contact details through a menu;
 		categories(2);
 		printf("Select category: ");
 		scanf("%d", &i);
@@ -138,9 +140,9 @@ void categories(int choice1){
 		if (editChoice == 1){ //name
 			printf("Enter new name: ");
 			scanf(" %[^\n]%*c", category[i].contact[x].name);
-		}else if (editChoice == 2){ // number
+		}else if (editChoice == 2){ // tel number
 			do{ // gets phone number and makes sure it is only made of integers;
-				printf("Enter phone number: ");
+				printf("Enter phone number: "); // makes sure input is not invalid
 					phone = scanf("%d%c", &category[i].contact[x].telnum, &enter);
 					if (phone != 2 || enter != '\n'){
 					printf("Invalid number, try again.\n");
@@ -161,8 +163,8 @@ void categories(int choice1){
 }
 
 int main(){
-	int select = 0;
-	int *ptrS = &select;
+	int select = 0; // user's input to questions
+	int *ptrS = &select; // pointer to user's input (for other functions)
 	printf("Welcome!\n");
 	while (select != 5){
 		printf("\nWhat would you like to do? (1)Create a new contact (2)View categories (3)View specific contacts (4)Edit details (5)Exit\n");
