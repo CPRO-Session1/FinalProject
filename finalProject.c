@@ -186,10 +186,10 @@ int main ()
 				scanf (" %c", &x);
 				if (x == 'Y' || x == 'y') {
 					printf ("You found %d SETs! Congratulations! Thanks for playing!\n", amountOfSets);
-					break;
+					exit(1);
 				}
 			}
 		}
 	
 	}
-}
+

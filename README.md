@@ -1,5 +1,6 @@
 Yael Kelmer's README file. 
 
+To run my code you just need to type: ./finalproject
 
 My final project recreates the card game SET. This is how the game works: There will be 9 cards displayed on your screen. Each card has 3 characteristics: a number(1, 2, 3), a fill(e (empty), f (full), s (striped) ), and a shape(c (circle),s (square), t (triangle) ). These cards can be combined to form a SET. What is a SET you may ask? A SET is three cards, where each characteristic, when looked at individually, is either all the same OR all different. For example, a SET, would be three cards who have all different numbers, all different fills, and all the same shape. Your goal is to find as many SETs as you can! When you spot a set type in the location of each card (the location is the  number next to the description of the card). If you think thereare no SETs on the board, you can request more cards. 
 
