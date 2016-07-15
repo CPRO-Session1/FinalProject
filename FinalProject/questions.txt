@@ -1,0 +1,16 @@
+1. What is a group of frogs known as?
+2. What country has the highest environmental performance index?
+3. Which animal laughs like human being?
+4. In which city is manhattan located?
+5. In which building is the Columbia HSP for Intro to Programming in C?
+6. During what season do animals hybernate?
+7. How much wood would a woodchuck chuck if a woodchuck could chuck wood (answer in pounds)?
+8. In what month is Valentine's Day?
+10. Which underwater creature is bigger: Dolphin or Whale?
+11. In what year did Christopher Columbus sail the ocean blue?
+12. This device was used to solve math problems before the invention of electricity.
+13. What color comes after red in the rainbow? 
+14. What is the 16th letter in the alphabet?
+15. What is the first element in the periodic table (not in scientific notation)?
+16. How many students are in the Intro to Programming in C class?
+
