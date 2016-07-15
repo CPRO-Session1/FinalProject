@@ -1,6 +1,6 @@
 # Final Project
 
-It’s a text adventure game.
+It’s a text adventure game. You play as a rap god trying to collect his rap lyric notes. You win when you rap by yourself in a shack.
 I picked a text adventure game to do because it seemed accomplishable and I like playing games.
 
 ## Compliation
