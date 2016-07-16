@@ -47,6 +47,8 @@ char* elfn(char gender){//This function calculates a new elf name
     kk = (rand() % (nonb_names_end - nonb_names_begin)) + nonb_names_begin;
     return allelf_names[kk];
   }
+  printf("Unrecoverable logic error\n");
+  return NULL;
 }
 
 
@@ -87,6 +89,8 @@ char* hobbitn(char gender){//This function calculates a new hobbit name
     kk = (rand() % (nonb_names_end - nonb_names_begin)) + nonb_names_begin;
     return allhob_names[kk];
   }
+  printf("Unrecoverable logic error\n");
+  return NULL;
 
 }
 
@@ -110,7 +114,7 @@ int hobbita(int age){//This function calculates a new hobbit age
 
 int main(){	
   srand(time(0));
-  char yes1, yes2, yes3, yes4, yes5, yes6, yes7;//These variables will be used in do while loops for the user to decide	
+  char yes1, yes2, yes3, yes4, yes5, yes6;//These variables will be used in do while loops for the user to decide	
                                                 //if they'd like to continue or start a section over
 
   printf("\nWelcome to the Middle Earth simulator! This is creating your own profile\n");
