@@ -1,5 +1,3 @@
-#Important note!!11!1
-I'm working on a much cleaner, more organized version of this project that I'll upload on sunday at the latest
 #How to play the game
 The game consists of a series of messages that print out at specific times. The player interacts with the game using commands. Although not required, before writing a command, press enter to pause the messages, then write the command, then press enter again to unpause them. The commands are as follows.
 ### Pausing the game
