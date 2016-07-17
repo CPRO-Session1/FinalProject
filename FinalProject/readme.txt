@@ -7,7 +7,7 @@ This is a quiz show game programmed in C during Columbia HSP. My project takes q
 
 In my proposal, I mentioned including a timer; however, I decided in the end not to add one. I also stated in my introduction that I would have different slots for different categories with different point systems. I later decided that I would not have different categories but a list of questions that players of  'Ava's Quiz Game' would need to answer. Although I did not have time to include graphics, I created a fun looking 'main menu'!
 
-All of the answers to the questions, if you want to beat the game, is in answer.txt . If you want to view the question and the answer at the same time, go to line -- and uncomment it. (but I recommend playing without looking at the answers first!)
+All of the answers to the questions, if you want to beat the game, are in answer.txt . 
 
 
 I got my idea of how to set up Ava's Quiz Show here: http://www.codewithc.com/quiz-game-mini-project-in-c/ 
