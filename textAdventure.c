@@ -14,13 +14,14 @@ const char* CAMERA_LIST = "start"; /* Hardcoded because there's no platform-inde
 /* timeToParse: The string to parse */
 /* stLen: a pointer that will be set to the character length of the time string */
 /* returns: the time that the string represents */
-unsigned long int parseTimeString(char* timeToParse, int* stLen){
-    unsigned int args[] = {0, 0, 0};
+unsigned long int parseTimeString(char** timeToParse){
     unsigned long int ret = 0;
-    for(int i = 0; i < sscanf(timeToParse, "%u:%u:%u%n", args, args + 1, args + 2, stLen); i++){
+    int i = 0;
+    do{
+        i++;
         ret *= 60;
-        ret += args[i];
-    }
+        ret += strtoul(*timeToParse, timeToParse, 10);
+    }while(**timeToParse == ':' && i < 3);
     return ret;
 }
 
@@ -43,7 +44,6 @@ there's no reason to continue delaying, as it is already being delayed elsewhere
 /* seconds: the time to delay for. */
 void delay(unsigned long int* currentTime, int* paused, unsigned long int seconds){
     /* do it with a for loop so that I can increment currentTime properly */
-    //printf("Delay start.\n*currentTime: %lu\nseconds: %lu\n", *currentTime, seconds);
     for(int i = 0; i < seconds; i++){
         unsigned long int startSecond = time(0);
         while((time(0) - startSecond < 1)){  /* Will loop for 1 second */
@@ -53,7 +53,6 @@ void delay(unsigned long int* currentTime, int* paused, unsigned long int second
             }
         }
         ++*currentTime; /* increase the time by 1 */
-        //printf("CurrentTime increased to %lu\n", *currentTime);
     }
 }
 
@@ -63,33 +62,36 @@ void delay(unsigned long int* currentTime, int* paused, unsigned long int second
 /* toTime: the time that the camera should fast forward to. */
 /* returns 1 if the game should continue, or 0 if it should end */
 int fastForward(FILE** camera, unsigned long int fromTime, unsigned long int* toTime){
-    /* Note: currentTime is not a pointer. It will not be changed outside the scope of this function */
     verifyTime(fromTime, *toTime);
 
     while(fromTime < *toTime){
-        int argOffset;
         char line[MAX_LINE_LENGTH];
+        memset(line, 0, MAX_LINE_LENGTH);
         fgets(line, MAX_LINE_LENGTH, *camera);
         InstructionMap inst = getInstruction(line);
 
         switch(inst.type){
             case WAIT_ABSOLUTE:
-                fromTime = verifyTime(fromTime, parseTimeString(inst.args, NULL));
+                fromTime = verifyTime(fromTime, parseTimeString(&inst.args));
                 break;
             case WAIT_RELATIVE:
-                fromTime += parseTimeString(inst.args, NULL);
+                fromTime += parseTimeString(&inst.args);
                 break;
             case ONGOING_EVENT_ABSOLUTE:
-                if(verifyTime(fromTime, parseTimeString(inst.args, &argOffset)) > *toTime)
-                    printf("%s", inst.args + argOffset);
+                if(verifyTime(fromTime, parseTimeString(&inst.args)) > *toTime){
+                    printf("%s", inst.args);
+                }
                 break;
             case ONGOING_EVENT_RELATIVE:
-                if(fromTime + parseTimeString(inst.args, &argOffset) > *toTime)
-                    printf("%s", inst.args + argOffset);
+                if(fromTime + parseTimeString(&inst.args) > *toTime)
+                    printf("%s", inst.args);
                 break;
-            case EXIT:
             case UNDEFINED:
-                return 0;
+                printf("Undefined instruction in stream. Exiting...\n");
+                exit(0);
+            case EXIT:
+                printf("Stream has already ended. Exiting...\n");
+                exit(0);
         }
     }
     /* fromTime will be equal to the closest time to the target that is not before it. This just makes sure that
@@ -103,7 +105,10 @@ int fastForward(FILE** camera, unsigned long int fromTime, unsigned long int* to
 /* returns: 1 if the camera has been changed, or 0 if it has not been changed */
 int setCamera(char* name, FILE** camera){
     char path[100]; /* stupidly long just in case */
+
+    if(name[strlen(name) - 1] == '\n') name[strlen(name) - 1] = '\0';
     sprintf(path, "./Cameras/%s.txt", name);
+
     FILE* temp = fopen(path, "r");
     if(temp == NULL)return 0;
     if(*camera != NULL)fclose(*camera);
@@ -152,6 +157,7 @@ int handleCommand(char* str, unsigned long int* currentTime, FILE** camera, int*
 /* paused: boolean representing whether or not the output is paused */
 int readNextLine(unsigned long int* currentTime, FILE** camera, int* paused){
     char line[MAX_LINE_LENGTH];
+    memset(line, 0, MAX_LINE_LENGTH);
     fgets(line, MAX_LINE_LENGTH, *camera);
 
     InstructionMap inst = getInstruction(line);
@@ -162,10 +168,10 @@ int readNextLine(unsigned long int* currentTime, FILE** camera, int* paused){
             // printf("\n");
             break;
         case WAIT_ABSOLUTE:
-            delay(currentTime, paused, verifyTime(*currentTime, parseTimeString(inst.args, NULL)) - *currentTime);
+            delay(currentTime, paused, verifyTime(*currentTime, parseTimeString(&inst.args)) - *currentTime);
             break;
         case WAIT_RELATIVE:
-            delay(currentTime, paused, parseTimeString(inst.args, NULL));
+            delay(currentTime, paused, parseTimeString(&inst.args));
             break;
         case UNDEFINED:
             printf("Undefined instruction in event stream.\n");
@@ -201,7 +207,11 @@ void* inputThread(void* args){
 
     char command[MAX_COMMAND_LENGTH];
 
-    while(handleCommand(fgets(command, MAX_COMMAND_LENGTH, stdin), currentTime, camera, paused));
+    while(1){
+        memset(command, 0, MAX_COMMAND_LENGTH);
+        fgets(command, MAX_COMMAND_LENGTH, stdin);
+        if(handleCommand(command, currentTime, camera, paused) == 0) break;
+    }
     printf("Exit command recieved. Exiting...\n");
     exit(0);
 }
@@ -210,15 +220,18 @@ int main(int argc, char* argv[]){
     unsigned long int gameTime = 0;
     FILE* camera = NULL;
     /* Will only try to set the camera if there is a second argument */
-    if(argc > 1 && !setCamera(argv[1], &camera)){
-        printf("Invalid filename: %s. ", argv[1]);
+
+    if(argc > 1 && setCamera(argv[1], &camera)){
+        printf("Loaded camera: %s\n", argv[1]);
     }else{
-        printf("Loading default camera: start\n");
-        if(!setCamera("start", &camera)){
-            printf("Default camera missing. Exiting...\n");
+        if(setCamera("start", &camera)){
+            printf("Loaded default camera\n");
+        }else{
+            printf("Error: default camera is missing. Exiting...");
             exit(0);
         }
     }
+
     int paused = 0;
     GameData gameData = {&gameTime, &camera, &paused};
     pthread_t inTh;

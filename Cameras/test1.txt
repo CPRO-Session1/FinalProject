@@ -1,0 +1,30 @@
+i test1 seconds: 0
+oa 10 test1 seconds: 0
+wa 1
+i test1 seconds: 1
+oa 10 test1 seconds: 1
+wa 2
+i test1 seconds: 2
+oa 10 test1 seconds: 2
+wa 3
+i test1 seconds: 3
+oa 10 test1 seconds: 3
+wa 4
+i test1 seconds: 4
+oa 10 test1 seconds: 4
+wa 5
+i test1 seconds: 5
+oa 10 test1 seconds: 5
+wa 6
+i test1 seconds: 6
+oa 10 test1 seconds: 6
+wa 7
+i test1 seconds: 7
+oa 10 test1 seconds: 7
+wa 8
+i test1 seconds: 8
+oa 10 test1 seconds: 8
+wa 9
+i test1 seconds: 9
+oa 10 test1 seconds: 9
+q
