@@ -250,4 +250,6 @@ int main(int argc, char* argv[]){
     pthread_create(&outTh, NULL, outputThread, &gameData);
     pthread_join(inTh, NULL);
     pthread_join(outTh, NULL);
+
+    return 0;
 }
