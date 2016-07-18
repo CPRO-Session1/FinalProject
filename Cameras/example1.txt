@@ -1,0 +1,14 @@
+wa 1
+i Hello!
+wa 3
+i Welcome to the example!
+wa 5
+i I just waited until the 5 second mark! This should have looked like two seconds to you.
+wr 4
+i I just waited 4 seconds.
+wa 10
+i This should pop up at the 10 second mark
+wa 12
+i Let's change cameras
+wa 15
+camera example2

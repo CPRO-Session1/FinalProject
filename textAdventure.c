@@ -164,8 +164,6 @@ int readNextLine(unsigned long int* currentTime, FILE** camera, int* paused){
     switch(inst.type){
         case INSTANT_EVENT:
             printf("%s", inst.args);
-            // for(int i = 0; i < strlen(inst.args); i++)printf("%hu ", inst.args[i]);
-            // printf("\n");
             break;
         case WAIT_ABSOLUTE:
             delay(currentTime, paused, verifyTime(*currentTime, parseTimeString(&inst.args)) - *currentTime);
@@ -177,6 +175,18 @@ int readNextLine(unsigned long int* currentTime, FILE** camera, int* paused){
             printf("Undefined instruction in event stream.\n");
         case EXIT:
             return 0;
+        case CHANGE_CAMERA:
+            if(setCamera(inst.args, camera)){
+                return fastForward(camera, 0, currentTime);
+            }else{
+                printf("Error: No such camera exists. Exiting...\n");
+                exit(0);
+            }
+        case PAUSE:
+            printf("Game is paused. Press enter to unpause.\n");
+        case PAUSE_SILENT:
+            *paused = 1;
+            break;
     }
     return 1;
 }

@@ -1,0 +1,35 @@
+wa 1
+oa 20 this camera has been waiting for you for a while. 15 seconds, give or take.
+i Waiting for camera to change
+wa 5
+i Still waiting
+wa 10
+i STIIIIIILLLL waiting
+wa 15
+i Hello! This is a different camera!
+wa 17
+i I can also pause your game. Behold!
+p
+i Welcome back! Sorry for pausing you so abruptly
+wa 20
+i I can also pause your game without it telling you that it's paused, like so (press enter to continue):
+ps
+i Isn't that cool!?
+wa 22
+i And unnecessary!?
+wa 23
+i ...
+wa 24
+i ...
+wa 25
+i yes, it probably is
+wa 27
+i ...
+wa 29
+i ...
+wa 31
+i Oh well, all's well that ends well.
+wa 33
+i Such as this game
+wa 34
+q
