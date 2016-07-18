@@ -1,0 +1,6 @@
+i Hello!
+wa 4
+i You are now 5 seconds into the game.
+wa 5
+i 1 second has passed since the previous message
+q
