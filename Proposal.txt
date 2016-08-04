@@ -1,0 +1,16 @@
+Andrew Zihenni
+Proposal:
+I'm going to create a text adventure game. The player is
+stranded on an island alone. The objective is to create a
+boat to get back home. This game is going to
+consist of six different locations. On each location will
+be a different set of items that will help the player build the boat.
+After the player visits each location and chooses the items he/she
+believes will help him/her, the item goes back to the beach. Once you get
+the necessary items that will allow you to create the boat, the game ends.
+Conceptually, I will be using different functions to create this program.
+I'll also need a lot of If statements so that if the person chooses an object
+from one of the locations, it goes to the beach where it is stored and printed.
+Although I don't think loops will be necessary, they might find their way in my project
+if deemed necessary.
+Thanks
