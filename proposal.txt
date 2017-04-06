@@ -1,0 +1,7 @@
+For my final project I will make a reminders calendar. I will give the user the option to make reminders that they can categorise and I wll be able to let them retreive this information whenever they ask for it. This program will ask for the reminder name, date, time, and urgency ranking. 
+
+I will use a struct to ask for the reminder requirements. I will use if statements for pulling up the data that they logged. functions to help me print out the information in an organised manner. I will use arrays and strings to set each information and put them in place. I will use loops to question whether they want to continue making more reminders or not with conditional statements.
+
+I chose this program for my project because I am always so forgetful. This program will let me input all my reminders for the day which is very helpful for people like me.
+
+I will only be using <stdio.h> and <string.h> to make strings.
